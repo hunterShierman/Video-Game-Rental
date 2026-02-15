@@ -1,0 +1,411 @@
+// src/pages/HomePage.tsx
+import { Link } from 'react-router-dom';
+import { Gamepad2, Key, Star, Clock, Check, ArrowRight, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+
+function HomePage() {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
+      {/* Navbar */}
+      <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-indigo-500/20 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2 text-white text-xl font-bold">
+            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg">
+              <Gamepad2 className="w-6 h-6" />
+            </div>
+            <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              GameRent
+            </span>
+          </div>
+          <div className="flex gap-6 items-center">
+            <Link 
+              to="/browse" 
+              className="text-gray-300 hover:text-white transition-colors font-medium"
+            >
+              Browse
+            </Link>
+            <Link 
+              to="/login" 
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/30"
+            >
+              Login
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section with Floating Animation */}
+      <div className="pt-32 pb-20 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          {/* Trust Badge */}
+          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 rounded-full px-4 py-2 mb-6 animate-fade-in">
+            <Sparkles className="w-4 h-4 text-indigo-400" />
+            <span className="text-sm text-indigo-300 font-medium">Join 10,000+ gamers saving money</span>
+          </div>
+
+          {/* Main Headline with Hover Float Animation */}
+          <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            <span className="inline-block hover:animate-float transition-transform duration-300">
+              Play AAA Games for
+            </span>
+            <br />
+            <span className="inline-block hover:animate-float transition-transform duration-300 delay-75 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              $5/Week, Not $90 Forever
+            </span>
+          </h1>
+
+          <p className="text-xl text-gray-300 mb-4 max-w-3xl mx-auto">
+            Why commit to expensive game purchases? Rent any game, play for a week, 
+            and only pay for what you actually use.
+          </p>
+
+          {/* Social Proof Numbers */}
+          <div className="flex justify-center gap-8 mb-8 text-sm text-gray-400">
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-400" />
+              <span>15,000+ rentals</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-400" />
+              <span>4.8/5 rating</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-400" />
+              <span>No commitment</span>
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link 
+              to="/browse"
+              className="group bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:from-indigo-500 hover:to-purple-500 transition-all transform hover:scale-105 shadow-2xl shadow-indigo-500/50 flex items-center gap-2"
+            >
+              Browse Games
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <button className="text-gray-300 hover:text-white px-8 py-4 rounded-lg font-semibold border border-gray-700 hover:border-indigo-500 transition-all">
+              See How It Works
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Live Activity Ticker */}
+      <div className="bg-gradient-to-r from-indigo-900/20 to-purple-900/20 border-y border-indigo-500/20 py-4 overflow-hidden">
+        <div className="flex gap-12 animate-scroll whitespace-nowrap">
+          {[
+            "🎮 Sarah just rented Elden Ring",
+            "⭐ Mike reviewed Baldur's Gate 3 - 5 stars",
+            "🎮 Alex added Cyberpunk 2077 to waitlist",
+            "⭐ Emma rented Hogwarts Legacy",
+            "🎮 Tom just started playing Spider-Man 2"
+          ].concat([
+            "🎮 Sarah just rented Elden Ring",
+            "⭐ Mike reviewed Baldur's Gate 3 - 5 stars",
+            "🎮 Alex added Cyberpunk 2077 to waitlist"
+          ]).map((activity, i) => (
+            <span key={i} className="text-gray-400 text-sm font-medium">
+              {activity}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Feature Preview Section - 3 Boxes */}
+      <div className="max-w-7xl mx-auto px-6 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Box 1 - Browse and Filters */}
+          <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all group">
+            <div className="aspect-video bg-gradient-to-br from-indigo-900/30 to-purple-900/20 rounded-xl mb-6 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/40 transition-all">
+              <Gamepad2 className="w-16 h-16 text-indigo-400/40 group-hover:text-indigo-400/60 transition-colors" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2 text-center">
+              BROWSE AND FILTERS
+            </h3>
+          </div>
+
+          {/* Box 2 - Rent and Expiring Keys */}
+          <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all group">
+            <div className="aspect-video bg-gradient-to-br from-indigo-900/30 to-purple-900/20 rounded-xl mb-6 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/40 transition-all">
+              <Key className="w-16 h-16 text-purple-400/40 group-hover:text-purple-400/60 transition-colors" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2 text-center">
+              RENT AND EXPIRING KEYS
+            </h3>
+          </div>
+
+          {/* Box 3 - Reviews and Ratings */}
+          <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all group">
+            <div className="aspect-video bg-gradient-to-br from-indigo-900/30 to-purple-900/20 rounded-xl mb-6 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/40 transition-all">
+              <Star className="w-16 h-16 text-pink-400/40 group-hover:text-pink-400/60 transition-colors" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2 text-center">
+              REVIEWS AND RATINGS
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      {/* How It Works Section */}
+      <div className="max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">How It Works</h2>
+          <p className="text-gray-400 text-lg">Get started in just 4 simple steps</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {[
+            {
+              step: "01",
+              icon: <Gamepad2 className="w-8 h-8" />,
+              title: "Browse Games",
+              description: "Filter by genre, platform, and rating to find your next adventure"
+            },
+            {
+              step: "02",
+              icon: <Clock className="w-8 h-8" />,
+              title: "Rent for a Week",
+              description: "Pay $5-10 depending on game popularity. No commitment required"
+            },
+            {
+              step: "03",
+              icon: <Key className="w-8 h-8" />,
+              title: "Get Your Key",
+              description: "Receive a unique access code instantly via email"
+            },
+            {
+              step: "04",
+              icon: <Star className="w-8 h-8" />,
+              title: "Play & Review",
+              description: "Enjoy the game and share your experience with the community"
+            }
+          ].map((item, index) => (
+            <div 
+              key={index}
+              className="relative group h-full"
+            >
+              {/* Connector Line */}
+              {index < 3 && (
+                <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-indigo-500/50 to-transparent -z-10" />
+              )}
+              
+              <div className="bg-gradient-to-br from-slate-900/50 to-slate-800/30 border border-indigo-500/20 rounded-2xl p-8 hover:border-indigo-500/50 transition-all hover:transform hover:scale-105 h-full">
+                <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 text-indigo-400 group-hover:scale-110 transition-transform">
+                  {item.icon}
+                </div>
+                <div className="text-indigo-400/40 text-sm font-bold mb-2">STEP {item.step}</div>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Comparison Table */}
+      <div className="max-w-6xl mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">Why Rent Instead of Buy?</h2>
+          <p className="text-gray-400 text-lg">Compare your options and save money</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 border border-indigo-500/30 rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-4 gap-px bg-indigo-500/10">
+            {/* Header */}
+            <div className="bg-slate-900 p-6"></div>
+            <div className="bg-slate-900 p-6 text-center">
+              <div className="text-gray-400 font-semibold">Buy Game</div>
+            </div>
+            <div className="bg-slate-900 p-6 text-center">
+              <div className="text-gray-400 font-semibold">Subscription</div>
+            </div>
+            <div className="bg-gradient-to-br from-indigo-900/50 to-purple-900/30 p-6 text-center relative">
+              <div className="absolute top-2 right-2">
+                <span className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold">BEST VALUE</span>
+              </div>
+              <div className="text-white font-bold">Our Rental</div>
+            </div>
+
+            {/* Cost */}
+            <div className="bg-slate-900/50 p-6 font-semibold text-white">Cost</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">$90 upfront</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">$15/month</div>
+            <div className="bg-slate-900/50 p-6 text-center">
+              <span className="text-green-400 font-bold">$5-10/week</span>
+            </div>
+
+            {/* Commitment */}
+            <div className="bg-slate-900/50 p-6 font-semibold text-white">Commitment</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Forever</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Monthly</div>
+            <div className="bg-slate-900/50 p-6 text-center">
+              <span className="text-green-400 font-bold">1 week only</span>
+            </div>
+
+            {/* Selection */}
+            <div className="bg-slate-900/50 p-6 font-semibold text-white">Selection</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">1 game</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Limited library</div>
+            <div className="bg-slate-900/50 p-6 text-center">
+              <span className="text-green-400 font-bold">Full library</span>
+            </div>
+
+            {/* Risk */}
+            <div className="bg-slate-900/50 p-6 font-semibold text-white">Risk</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">High</div>
+            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Medium</div>
+            <div className="bg-slate-900/50 p-6 text-center">
+              <span className="text-green-400 font-bold">Zero</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">Everything You Need</h2>
+          <p className="text-gray-400 text-lg">A complete gaming rental experience</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              icon: <Gamepad2 className="w-7 h-7 text-indigo-400" />,
+              title: "Browse & Filter",
+              description: "Explore our extensive library with advanced filtering by genre, platform, and ratings. Find exactly what you're looking for in seconds.",
+              stats: "500+ Games"
+            },
+            {
+              icon: <Key className="w-7 h-7 text-purple-400" />,
+              title: "Instant Access Keys",
+              description: "Get unique rental keys delivered instantly via email. Keys automatically expire at the end of your rental period for fairness.",
+              stats: "Instant Delivery"
+            },
+            {
+              icon: <Star className="w-7 h-7 text-pink-400" />,
+              title: "Community Reviews",
+              description: "Read honest reviews from real gamers. Share your experiences and help others discover their next favorite game.",
+              stats: "10K+ Reviews"
+            }
+          ].map((feature, index) => (
+            <div 
+              key={index}
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+              className="group bg-gradient-to-br from-slate-900/60 to-slate-800/40 backdrop-blur-sm border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all hover:transform hover:scale-105 relative overflow-hidden"
+            >
+              {/* Gradient Glow on Hover */}
+              <div className={`absolute inset-0 bg-gradient-to-br from-indigo-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity -z-10`} />
+              
+              <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                {feature.icon}
+              </div>
+
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-2xl font-bold text-white">{feature.title}</h3>
+                <span className="text-xs font-bold text-indigo-400 bg-indigo-400/10 px-3 py-1 rounded-full">
+                  {feature.stats}
+                </span>
+              </div>
+
+              <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+
+              {hoveredCard === index && (
+                <div className="mt-4 text-indigo-400 font-semibold text-sm flex items-center gap-2">
+                  Learn more <ArrowRight className="w-4 h-4" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="border-t border-indigo-900/30 bg-slate-950/50">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 text-white text-xl font-bold mb-4">
+                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg">
+                  <Gamepad2 className="w-5 h-5" />
+                </div>
+                <span>GameRent</span>
+              </div>
+              <p className="text-gray-400 text-sm">Affordable gaming for everyone. Rent, play, review.</p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-semibold mb-4">Product</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><a href="#" className="hover:text-white transition-colors">Browse Games</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">How It Works</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-white font-semibold mb-4">Company</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-white font-semibold mb-4">Trust & Safety</h3>
+              <div className="flex gap-2">
+                <div className="bg-slate-800 border border-indigo-500/30 rounded px-3 py-1 text-xs text-gray-400">
+                  🔒 Secure Payments
+                </div>
+                <div className="bg-slate-800 border border-indigo-500/30 rounded px-3 py-1 text-xs text-gray-400">
+                  ✓ Fair Play
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-indigo-900/30 pt-8 text-center text-gray-500 text-sm">
+            <p>© 2026 GameRent. All rights reserved. Making gaming accessible and affordable.</p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Custom CSS for Animations */}
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-float:hover {
+          animation: float 2s ease-in-out infinite;
+        }
+
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default HomePage;
