@@ -1,4 +1,6 @@
 ﻿# Video Game Rental Platform
+ <img width="1618" height="562" alt="image" src="https://github.com/user-attachments/assets/f7f88263-3377-4cc0-aad4-f9de1f22f179" />
+
 
 A digital game rental platform where users can rent games for $5-10/week with temporary access keys.
 
@@ -191,3 +193,4 @@ See `TASKS.md` for the list of features that need to be built.
 
 
 Contact Hunter (Scrum Master) on Discord/Instagram
+
