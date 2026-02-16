@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Gamepad2, Key, Star, Clock, Check, ArrowRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
+import Navbar from '../components/NavBar';
 
 function HomePage() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -9,32 +10,7 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
       {/* Navbar */}
-      <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-indigo-500/20 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2 text-white text-xl font-bold">
-            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg">
-              <Gamepad2 className="w-6 h-6" />
-            </div>
-            <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              GameRent
-            </span>
-          </div>
-          <div className="flex gap-6 items-center">
-            <Link 
-              to="/browse" 
-              className="text-gray-300 hover:text-white transition-colors font-medium"
-            >
-              Browse
-            </Link>
-            <Link 
-              to="/login" 
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/30"
-            >
-              Login
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section with Floating Animation */}
       <div className="pt-32 pb-20 px-6">
@@ -114,38 +90,63 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Feature Preview Section - 3 Boxes */}
+        {/* Features Section */}
       <div className="max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">Everything You Need</h2>
+          <p className="text-gray-400 text-lg">A complete gaming rental experience</p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Box 1 - Browse and Filters */}
-          <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all group">
-            <div className="aspect-video bg-gradient-to-br from-indigo-900/30 to-purple-900/20 rounded-xl mb-6 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/40 transition-all">
-              <Gamepad2 className="w-16 h-16 text-indigo-400/40 group-hover:text-indigo-400/60 transition-colors" />
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2 text-center">
-              BROWSE AND FILTERS
-            </h3>
-          </div>
+          {[
+            {
+              icon: <Gamepad2 className="w-7 h-7 text-indigo-400" />,
+              title: "Browse & Filter",
+              description: "Explore our extensive library with advanced filtering by genre, platform, and ratings. Find exactly what you're looking for in seconds.",
+              stats: "500+ Games"
+            },
+            {
+              icon: <Key className="w-7 h-7 text-purple-400" />,
+              title: "Instant Access Keys",
+              description: "Get unique rental keys delivered instantly via email. Keys automatically expire at the end of your rental period for fairness.",
+              stats: "Secure Key"
+            },
+            {
+              icon: <Star className="w-7 h-7 text-pink-400" />,
+              title: "User Reviews",
+              description: "Read honest reviews from real gamers. Share your experiences and help others discover their next favorite game.",
+              stats: "4.8★ Rated"
+            }
+          ].map((feature, index) => (
+            <div 
+              key={index}
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+              className="group bg-gradient-to-br from-slate-900/60 to-slate-800/40 backdrop-blur-sm border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all hover:transform hover:scale-105 relative overflow-hidden h-full"
+            >
+              {/* Gradient Glow on Hover */}
+              <div className={`absolute inset-0 bg-gradient-to-br from-indigo-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity -z-10`} />
+              
+              <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                {feature.icon}
+              </div>
 
-          {/* Box 2 - Rent and Expiring Keys */}
-          <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all group">
-            <div className="aspect-video bg-gradient-to-br from-indigo-900/30 to-purple-900/20 rounded-xl mb-6 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/40 transition-all">
-              <Key className="w-16 h-16 text-purple-400/40 group-hover:text-purple-400/60 transition-colors" />
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2 text-center">
-              RENT AND EXPIRING KEYS
-            </h3>
-          </div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-2xl font-bold text-white">{feature.title}</h3>
+                <span className="text-xs font-bold text-indigo-400 bg-indigo-400/10 px-3 py-1 rounded-full">
+                  {feature.stats}
+                </span>
+              </div>
 
-          {/* Box 3 - Reviews and Ratings */}
-          <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all group">
-            <div className="aspect-video bg-gradient-to-br from-indigo-900/30 to-purple-900/20 rounded-xl mb-6 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/40 transition-all">
-              <Star className="w-16 h-16 text-pink-400/40 group-hover:text-pink-400/60 transition-colors" />
+              <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+
+              {hoveredCard === index && (
+                <div className="mt-4 text-indigo-400 font-semibold text-sm flex items-center gap-2">
+                  Learn more <ArrowRight className="w-4 h-4" />
+                </div>
+              )}
             </div>
-            <h3 className="text-xl font-bold text-white mb-2 text-center">
-              REVIEWS AND RATINGS
-            </h3>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -261,66 +262,6 @@ function HomePage() {
               <span className="text-green-400 font-bold">Zero</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="max-w-7xl mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Everything You Need</h2>
-          <p className="text-gray-400 text-lg">A complete gaming rental experience</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              icon: <Gamepad2 className="w-7 h-7 text-indigo-400" />,
-              title: "Browse & Filter",
-              description: "Explore our extensive library with advanced filtering by genre, platform, and ratings. Find exactly what you're looking for in seconds.",
-              stats: "500+ Games"
-            },
-            {
-              icon: <Key className="w-7 h-7 text-purple-400" />,
-              title: "Instant Access Keys",
-              description: "Get unique rental keys delivered instantly via email. Keys automatically expire at the end of your rental period for fairness.",
-              stats: "Instant Delivery"
-            },
-            {
-              icon: <Star className="w-7 h-7 text-pink-400" />,
-              title: "Community Reviews",
-              description: "Read honest reviews from real gamers. Share your experiences and help others discover their next favorite game.",
-              stats: "10K+ Reviews"
-            }
-          ].map((feature, index) => (
-            <div 
-              key={index}
-              onMouseEnter={() => setHoveredCard(index)}
-              onMouseLeave={() => setHoveredCard(null)}
-              className="group bg-gradient-to-br from-slate-900/60 to-slate-800/40 backdrop-blur-sm border border-indigo-500/30 rounded-2xl p-8 hover:border-indigo-500/60 transition-all hover:transform hover:scale-105 relative overflow-hidden"
-            >
-              {/* Gradient Glow on Hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br from-indigo-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity -z-10`} />
-              
-              <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                {feature.icon}
-              </div>
-
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-2xl font-bold text-white">{feature.title}</h3>
-                <span className="text-xs font-bold text-indigo-400 bg-indigo-400/10 px-3 py-1 rounded-full">
-                  {feature.stats}
-                </span>
-              </div>
-
-              <p className="text-gray-400 leading-relaxed">{feature.description}</p>
-
-              {hoveredCard === index && (
-                <div className="mt-4 text-indigo-400 font-semibold text-sm flex items-center gap-2">
-                  Learn more <ArrowRight className="w-4 h-4" />
-                </div>
-              )}
-            </div>
-          ))}
         </div>
       </div>
 
