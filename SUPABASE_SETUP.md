@@ -4,8 +4,8 @@
 
 Add these to your `.env` file:
 ```
-VITE_SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co 
+VITE_PUBLISHABLE=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ⚠️ Get the actual values from Hunter via Discord DM
