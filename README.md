@@ -51,15 +51,14 @@ Visit `http://localhost:5173`
 ```
 client/
 ├── src/
+│   ├── assets/           # Reusable components
 │   ├── components/       # Reusable components
-│   ├── pages/            # Page components
 │   ├── context/          # React Context (User Authentication sign in logic)
-│   ├── services/         # API calls to Supabase
 │   ├── hooks/            # Custom React hooks
-│   ├── types/            # TypeScript types
-│   ├── utils/            # Helper functions
 │   ├── lib/              # Supabase client
-│   └── styles/           # Global CSS
+│   ├── pages/            # Page components
+│   ├── services/         # API calls to Supabase
+│   ├── types/            # TypeScript types
 ```
 
 ## 🗄️ Database Schema
