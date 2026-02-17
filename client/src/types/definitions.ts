@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 // ============================================
 // GAME TYPES
 // ============================================
@@ -65,6 +63,15 @@ export interface CreateRentalInput {
   access_key: string;
   end_date: string;
   price: number;
+}
+
+// Rental joined with game info — used when displaying rental details to the user
+export interface RentalWithGame extends Rental {
+  games: {
+    title: string;
+    image_url: string | null;
+    platform: string;
+  };
 }
 
 // ============================================
