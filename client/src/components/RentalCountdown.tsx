@@ -37,12 +37,10 @@ const RentalCountdown = ({ endDate, rentalId }: RentalCountdownProps) => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(calculateTimeLeft(endDate));
 
   useEffect(() => {
-    // Recalculate every second
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft(endDate));
     }, 1000);
 
-    // Clean up the interval when the component unmounts
     return () => clearInterval(timer);
   }, [endDate]);
 

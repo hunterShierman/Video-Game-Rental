@@ -56,7 +56,7 @@ function HomePage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 
-              to="/browse"
+              to="/browse-page"
               className="group bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:from-indigo-500 hover:to-purple-500 transition-all transform hover:scale-105 shadow-2xl shadow-indigo-500/50 flex items-center gap-2"
             >
               Browse Games

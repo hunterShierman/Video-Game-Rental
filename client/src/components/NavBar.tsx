@@ -9,7 +9,6 @@ function Navbar() {
   return (
     <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-indigo-500/20 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2 text-white text-xl font-bold hover:opacity-80 transition-opacity">
           <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg">
             <Gamepad2 className="w-6 h-6" />
@@ -22,7 +21,7 @@ function Navbar() {
         {/* Navigation Links */}
         <div className="flex gap-6 items-center">
           <Link 
-            to="/browse" 
+            to="/browse-page" 
             className="text-gray-300 hover:text-white transition-colors font-medium"
           >
             Browse
