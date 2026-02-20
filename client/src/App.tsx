@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import RentalTestPage from './pages/RentalTestPage';
 import BrowsePage from './pages/BrowsePage';
 import GameDetailPage from './pages/GameDetailPage';
+import MyRentalsPage from './pages/MyRentalsPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/rental-test" element={<RentalTestPage />} />
         <Route path="/browse-page" element={<BrowsePage />} />
         <Route path="/games/:id" element={<GameDetailPage />} />
+        <Route path='/my-rentals' element={<MyRentalsPage />} />
       </Routes>
   );
 }
