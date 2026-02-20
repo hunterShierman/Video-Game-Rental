@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ReviewsSection from "../components/ReviewsSection";
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Gamepad2, Star, Clock, Users, ArrowLeft,
@@ -8,7 +9,6 @@ import Navbar from '../components/NavBar';
 import { getGameById } from '../services/gameService';
 import type { Game } from '../types/definitions';
 import { rentGame, hasActiveRental } from '../services/rentalService';
-import Waitlist from '../components/Waitlist';
 
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -164,7 +164,7 @@ const GameDetailPage = () => {
 
           {/* Right column — details and rental action */}
           <div className="lg:col-span-2 space-y-6">
-
+          
             {/* Title and price */}
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">{game.title}</h1>
@@ -200,7 +200,10 @@ const GameDetailPage = () => {
                 ))}
               </div>
             </div>
-
+            {/* Reviews */}
+<div className="mt-6">
+  <ReviewsSection gameId={game.id} />
+</div>
             {/* Success state — show access key */}
             {success && accessKey && (
               <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/10 border border-green-500/30 rounded-2xl p-6">
@@ -278,7 +281,12 @@ const GameDetailPage = () => {
                 Rent for 1 Week — ${game.price}
                 </button>
             ) : (
-                <Waitlist gameId={game.id} gameTitle={game.title} />
+                <button
+                disabled
+                className="w-full bg-slate-800/60 border border-slate-700 text-gray-400 py-4 rounded-xl font-bold text-lg cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                Join Waitlist
+                </button>
             )
             )}
           </div>
