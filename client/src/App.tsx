@@ -1,7 +1,7 @@
 // src/App.tsx
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
-import WaitlistPage from './pages/waitlistPage';
+import WaitlistPage from './pages/WaitlistPage';
 import SupabaseTest from './components/SupabaseTest';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
