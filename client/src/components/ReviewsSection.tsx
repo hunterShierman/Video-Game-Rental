@@ -156,6 +156,7 @@ export default function ReviewsSection({ gameId }: Props) {
                         className={`w-6 h-6 ${
                           n <= rating ? "text-yellow-400" : "text-slate-600"
                         }`}
+                        fill = {n <= rating ? "currentColor" : "none"}
                       />
                     </button>
                   ))}
@@ -216,12 +217,16 @@ export default function ReviewsSection({ gameId }: Props) {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1 text-yellow-400">
+                        <p className="text-gray-500 text-xs mt-2">
+                            {r.reviewer_label ?? "user"}
+                        </p>
                       {[1, 2, 3, 4, 5].map((n) => (
                         <Star
                           key={n}
                           className={`w-4 h-4 ${
                             n <= r.rating ? "text-yellow-400" : "text-slate-700"
                           }`}
+                          fill = {n <= r.rating ? "currentColor" : "none"}
                         />
                       ))}
                     </div>

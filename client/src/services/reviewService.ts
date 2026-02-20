@@ -4,6 +4,8 @@ import type { Review } from "../types/definitions";
 
 /** Everyone can view reviews for a game */
 export const getReviewsForGame = async (gameId: string): Promise<Review[]> => {
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data, error } = await supabase
     .from("reviews")
     .select("id, user_id, game_id, rating, comment, created_at, updated_at")
@@ -11,8 +13,17 @@ export const getReviewsForGame = async (gameId: string): Promise<Review[]> => {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return (data as Review[]) ?? [];
+
+  const reviews = ((data as Review[]) ?? []).map((r) => ({
+    ...r,
+    reviewer_label: user && r.user_id === user.id ? "You" : maskUserId(r.user_id),
+  }));
+
+  return reviews;
 };
+
+// helper: turns a uuid into something short like "User 9f3a"
+const maskUserId = (id: string) => `User ${id.slice(0, 4)}`;
 
 /** Returns YOUR review for a game (or null if none) */
 export const getMyReviewForGame = async (gameId: string): Promise<Review | null> => {

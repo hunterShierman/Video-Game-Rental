@@ -85,6 +85,8 @@ export interface Review {
   comment: string | null;
   created_at: string;
   updated_at: string;
+  reviewer_label?: string;
+  
 }
 
 export interface CreateReviewInput {
