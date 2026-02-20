@@ -8,7 +8,7 @@ import Navbar from '../components/NavBar';
 import { getGameById } from '../services/gameService';
 import type { Game } from '../types/definitions';
 import { rentGame, hasActiveRental } from '../services/rentalService';
-import Waitlist from '../components/waitList';
+import Waitlist from '../components/Waitlist';
 
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();

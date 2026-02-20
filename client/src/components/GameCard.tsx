@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Gamepad2, Star, Clock } from 'lucide-react';
 import type { Game } from '../types/definitions';
-import Waitlist from './waitList';
 
 interface GameCardProps {
   game: Game;
@@ -73,18 +72,6 @@ const GameCard = ({ game }: GameCardProps) => {
             View details →
           </span>
           
-          {/* Only show the Waitlist Button if copies are 0 */}
-          {!isAvailable && (
-            <div 
-              onClick={(e) => { 
-               e.preventDefault(); 
-               e.stopPropagation(); 
-              }} 
-              className="z-[100] relative min-w-[120px] !pointer-events-auto"
->
-            <Waitlist gameId={game.id} gameTitle={game.title} />
-          </div>
-          )}
         </div>
       </div>
     </div>
