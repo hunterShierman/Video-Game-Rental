@@ -8,6 +8,7 @@ import Navbar from '../components/NavBar';
 import { getGameById } from '../services/gameService';
 import type { Game } from '../types/definitions';
 import { rentGame, hasActiveRental } from '../services/rentalService';
+import Waitlist from '../components/Waitlist';
 
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -277,12 +278,7 @@ const GameDetailPage = () => {
                 Rent for 1 Week — ${game.price}
                 </button>
             ) : (
-                <button
-                disabled
-                className="w-full bg-slate-800/60 border border-slate-700 text-gray-400 py-4 rounded-xl font-bold text-lg cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                Join Waitlist
-                </button>
+                <Waitlist gameId={game.id} gameTitle={game.title} />
             )
             )}
           </div>

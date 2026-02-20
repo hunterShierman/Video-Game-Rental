@@ -26,6 +26,12 @@ function Navbar() {
           >
             Browse
           </Link>
+          <Link 
+            to="/waitlist" 
+            className="text-gray-300 hover:text-white transition-colors font-medium"
+          >
+            My Waitlist
+          </Link>
           
           {user ? (
             // Logged in state

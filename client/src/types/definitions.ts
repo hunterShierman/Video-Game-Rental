@@ -92,7 +92,7 @@ export interface CreateReviewInput {
   rating: 1 | 2 | 3 | 4 | 5;
   comment?: string;
 }
-
+  
 export interface UpdateReviewInput {
   rating?: 1 | 2 | 3 | 4 | 5;
   comment?: string;

@@ -1,6 +1,7 @@
 // src/App.tsx
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
+import WaitlistPage from './pages/WaitlistPage';
 import SupabaseTest from './components/SupabaseTest';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -8,6 +9,7 @@ import RentalTestPage from './pages/RentalTestPage';
 import BrowsePage from './pages/BrowsePage';
 import GameDetailPage from './pages/GameDetailPage';
 import MyRentalsPage from './pages/MyRentalsPage';
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
         <Route path="/rental-test" element={<RentalTestPage />} />
         <Route path="/browse-page" element={<BrowsePage />} />
         <Route path="/games/:id" element={<GameDetailPage />} />
+        <Route path="/waitlist" element={<WaitlistPage />} />
         <Route path='/my-rentals' element={<MyRentalsPage />} />
       </Routes>
   );
