@@ -67,8 +67,11 @@ const GameCard = ({ game }: GameCardProps) => {
           </p>
         )}
 
-        <div className="mt-4 text-indigo-400 text-sm font-semibold group-hover:text-indigo-300 transition-colors">
-          View details →
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-indigo-400 text-sm font-semibold group-hover:text-indigo-300 transition-colors">
+            View details →
+          </span>
+          
         </div>
       </div>
     </div>
