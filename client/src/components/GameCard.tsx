@@ -30,8 +30,8 @@ const GameCard = ({ game }: GameCardProps) => {
 
         <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold ${
           isAvailable
-            ? 'bg-green-500/20 border border-green-500/40 text-green-400'
-            : 'bg-red-500/20 border border-red-500/40 text-red-400'
+            ? 'bg-green-500/50 border border-green-500/40 text-green-400'
+            : 'bg-red-500/50 border border-red-500/40 text-red-400'
         }`}>
           {isAvailable ? `${game.available_copies} Available` : 'Unavailable'}
         </div>

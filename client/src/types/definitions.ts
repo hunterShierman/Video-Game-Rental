@@ -74,6 +74,14 @@ export interface RentalWithGame extends Rental {
   };
 }
 
+export interface ExtensionEligibility {
+  eligible: boolean;
+  reason?: string;     
+  extensionCost: number; 
+  newEndDate: string;   
+}
+
+
 // ============================================
 // REVIEW TYPES
 // ============================================
