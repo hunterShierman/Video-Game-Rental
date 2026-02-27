@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Clock, Gamepad2, History, Key, Calendar, DollarSign, Film, Loader2, AlertCircle, CheckCircle, XCircle} from 'lucide-react';
+import { Clock, Gamepad2, History, Key, Calendar, DollarSign, 
+    Film, Loader2, AlertCircle, CheckCircle, RefreshCw} from 'lucide-react';
 import Navbar from '../components/NavBar';
-import RentalCountdown from '../components/RentalCountdown';
-import { getMyActiveRentals, getMyRentalHistory } from '../services/rentalService';
+import { getMyActiveRentals, getMyRentalHistory, expireStaleRentals } from '../services/rentalService';
 import type { RentalWithGame } from '../types/definitions';
+import { useNavigate } from 'react-router-dom';
+
 
 const MyRentalsPage = () => {
     const [activeRentals, setActiveRentals] = useState<RentalWithGame[]>([]);
@@ -13,6 +15,7 @@ const MyRentalsPage = () => {
         history: true
     });
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     // fetch both active and history rentals on page load
     useEffect(() => {
@@ -25,6 +28,7 @@ const MyRentalsPage = () => {
         try {
             // fetch active rentals
             try {
+                await expireStaleRentals();
                 const active = await getMyActiveRentals();
                 setActiveRentals(active);
             } catch (err) {
@@ -46,6 +50,7 @@ const MyRentalsPage = () => {
                 setLoading(prev => ({ ...prev, history: false}));
             }
         } catch (err) {
+            console.error(err);
             setError('Failed to load your rentals. Please try again.');
         }
     };
@@ -59,30 +64,35 @@ const MyRentalsPage = () => {
     };
     const getStatusBadge = (status: string) => {
         switch (status) {
-            case 'active' :
-                return (
-                    <span className='inline-flex items-center gap-1 text-xs font-bold text-green-400 bg-green-400/10 px-3 py-1 rounded-full'>
-                        <CheckCircle className='w-3 h-3' />
-                        ACTIVE 
-                    </span>
-                );
-            case 'completed':
-                return (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full">
-                        <History className='w-3 h-3' />
-                        COMPLETED
-                    </span>
-                );
-            default: 
+        case 'active':
             return (
-                <span className='text-xs font-bold text-gray-400 bg-gray-400/10 px-3 py-1 rounded-full'>
+                <span className='inline-flex items-center gap-1 text-xs font-bold text-green-300 bg-green-500/50 border border-green-500/50 px-3 py-1 rounded-full'>
+                    <CheckCircle className='w-3 h-3' />
+                    ACTIVE
+                </span>
+            );
+        case 'completed':
+            return (
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-300 bg-blue-500/50 border border-blue-500/50 px-3 py-1 rounded-full">
+                    <History className='w-3 h-3' />
+                    COMPLETED
+                </span>
+            );
+        case 'extended':
+            return (
+                <span className='inline-flex items-center gap-1 text-xs font-bold text-orange-300 bg-orange-500/50 border border-orange-500/50 px-3 py-1 rounded-full'>
+                    <RefreshCw className='w-3 h-3' />
+                    EXTENDED
+                </span>
+            );
+        default:
+            return (
+                <span className='inline-flex items-center gap-1 text-xs font-bold text-gray-300 bg-gray-500/10 border border-gray-500/50 px-3 py-1 rounded-full'>
                     {status.toUpperCase()}
                 </span>
             );
         }
     };
-
-    const isLoading = loading.active || loading.history;
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950'>
@@ -134,8 +144,10 @@ const MyRentalsPage = () => {
                     ) : activeRentals.length > 0 ? (
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                             {activeRentals.map((rental) => (
-                                <div key={rental.id}
-                                className='bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-green-500/30 rounded-2xl overflow-hidden hover:border-green-500/50 transition-all hover:shadow-lg hover:shadow-green-500/10'>
+                                <div 
+                                key={rental.id} 
+                                onClick={() => navigate(`/rental/${rental.id}/extend/${rental.game_id}`)}
+                                className='bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-green-500/30 rounded-2xl overflow-hidden cursor-pointer hover:border-green-500/50 transition-all hover:shadow-lg hover:shadow-green-500/10'>
                                     {/* game images */}
                                     <div className='h-40 bg-gradient-to-br from-indigo-900/10 to-purple-900/40 relative'>
                                         {rental.games.image_url ? (
@@ -153,6 +165,7 @@ const MyRentalsPage = () => {
                                         </div>
                                     </div>
                                     <div className='p-5'>
+
                                         <h3 className='text-xl font-bold text-white mb-2'>{rental.games.title}</h3>
                                         <div className='space-y-2 mb-4'>
                                             <div className='flex items-center gap-2 text-sm'>
@@ -177,7 +190,7 @@ const MyRentalsPage = () => {
                                             </div>
                                         </div>
                                         {/* Coutdown timer */}
-                                        <RentalCountdown endDate={rental.end_date} rentalId={rental.id} />
+
                                     </div>
                                 </div>
                             ))}
@@ -191,7 +204,6 @@ const MyRentalsPage = () => {
                             className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:from-indigo-500 hover:to-purple-500 transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/30">
                                 <Gamepad2 className='w-4 h-4' />
                                 Browse Games
-
 
                             </a>
                         </div>

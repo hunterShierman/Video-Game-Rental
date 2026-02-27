@@ -1,6 +1,6 @@
 // src/services/rentalService.ts
 import { supabase } from '../lib/supabaseClient';
-import type { Rental, RentalWithGame, CreateRentalInput } from '../types/definitions';
+import type { Rental, RentalWithGame, CreateRentalInput, ExtensionEligibility } from '../types/definitions';
 
 // Generates a rental access key in the format RENT-XXXX-XXXX-XXXX
 const generateAccessKey = (): string => {
@@ -121,7 +121,7 @@ export const getMyActiveRentals = async (): Promise<RentalWithGame[]> => {
     .from('rentals')
     .select('*, games(title, image_url, platform)')
     .eq('user_id', user.id)
-    .eq('status', 'active')
+    .in('status', ['active', 'extended'])
     .order('end_date', { ascending: true });
 
   if (error) {
@@ -149,4 +149,161 @@ export const getMyRentalHistory = async (): Promise<RentalWithGame[]> => {
   }
 
   return (data as RentalWithGame[]) || [];
+};
+
+// Call this BEFORE extending — use the result to show the cost confirmation UI.
+// Returns eligibility, the extension cost, and the projected new end date.
+// Blocks extension if an active waitlist exists for the game.
+export const checkExtensionEligibility = async (rentalId: string): Promise<ExtensionEligibility> => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+
+  // Fetch the rental (must belong to current user and be active)
+  const { data: rental, error: rentalError } = await supabase
+    .from('rentals')
+    .select('id, game_id, end_date, status, price')
+    .eq('id', rentalId)
+    .eq('user_id', user.id)
+    .single();
+
+  if (rentalError || !rental) throw new Error('Rental not found');
+  if (rental.status == 'expired') {
+    return { eligible: false, reason: 'Only active rentals can be extended.', extensionCost: 0, newEndDate: '' };
+  }
+
+  // Add a restriction that only allows users the ability to renew within 2 days of expiry (prevents spamming renew)
+  const now = new Date();
+  const endDate = new Date(rental.end_date);
+  const daysRemaining = (endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+
+  if (daysRemaining > 2) {
+      return {
+          eligible: false,
+          reason: `Extensions are only available within 2 days of expiry. You have ${Math.ceil(daysRemaining)} days remaining.`,
+          extensionCost: 0,
+          newEndDate: '',
+      };
+  }
+
+  // Check for an active waitlist on this game
+  const { count, error: waitlistError } = await supabase
+    .from('waitlist')
+    .select('id', { count: 'exact', head: true })
+    .eq('game_id', rental.game_id);
+
+  if (waitlistError) {
+    console.error('Error checking waitlist:', waitlistError);
+    throw waitlistError;
+  }
+
+  if (count && count > 0) {
+    return {
+      eligible: false,
+      reason: 'This game has users on the waitlist. Extensions are not permitted while others are waiting.',
+      extensionCost: 0,
+      newEndDate: '',
+    };
+  }
+
+  // Eligible — project the new end date (7 more days from current end_date)
+  const currentEnd = new Date(rental.end_date);
+  currentEnd.setDate(currentEnd.getDate() + 7);
+
+  return {
+    eligible: true,
+    extensionCost: rental.price,
+    newEndDate: currentEnd.toISOString(),
+  };
+};
+
+// Call this after the user confirms the extension cost.
+// Updates the rental's end_date and status, then logs an extension transaction.
+export const extendRental = async (rentalId: string): Promise<Rental> => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+
+  // Re-run eligibility check — prevent extending if conditions changed between confirm and submit
+  const eligibility = await checkExtensionEligibility(rentalId);
+  if (!eligibility.eligible) throw new Error(eligibility.reason);
+
+  // Fetch rental price for the transaction log
+  const { data: rental, error: fetchError } = await supabase
+    .from('rentals')
+    .select('price')
+    .eq('id', rentalId)
+    .single();
+
+  if (fetchError || !rental) throw new Error('Failed to fetch rental details');
+
+  // Update rental with new end_date and mark as 'extended'
+  const { data: updatedRental, error: updateError } = await supabase
+    .from('rentals')
+    .update({
+      end_date: eligibility.newEndDate,
+      status: 'extended',
+    })
+    .eq('id', rentalId)
+    .select()
+    .single();
+
+  if (updateError || !updatedRental) {
+    console.error('Error extending rental:', updateError);
+    throw new Error('Failed to extend rental');
+  }
+
+  // Log extension transaction — non-fatal if this fails
+  const { error: transactionError } = await supabase
+    .from('transactions')
+    .insert({
+      user_id: user.id,
+      rental_id: rentalId,
+      amount: rental.price,
+      transaction_type: 'extension',
+    });
+
+  if (transactionError) {
+    console.error('Error logging extension transaction:', transactionError);
+  }
+
+  return updatedRental as Rental;
+};
+
+// Call this before getMyActiveRentals to clean up stale rentals
+export const expireStaleRentals = async (): Promise<void> => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+
+  const { error } = await supabase
+    .from('rentals')
+    .update({ status: 'expired' })
+    .eq('user_id', user.id)
+    .in('status', ['active', 'extended'])
+    .lt('end_date', new Date().toISOString());
+
+  if (error) {
+    console.error('Error expiring stale rentals:', error);
+    throw error;
+  }
+};
+
+/**
+ * get rental copy record and all its fields
+ */
+export const getRentalRecord = async (rentalId: string): Promise<Rental> => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+
+  const { data, error } = await supabase
+    .from('rentals')
+    .select('*')
+    .eq('id', rentalId)
+    .eq('user_id', user.id)
+    .single();
+
+  if (error || !data) {
+    console.error('Error fetching rental record:', error);
+    throw new Error('Rental not found');
+  }
+
+  return data as Rental;
 };

@@ -9,6 +9,7 @@ import RentalTestPage from './pages/RentalTestPage';
 import BrowsePage from './pages/BrowsePage';
 import GameDetailPage from './pages/GameDetailPage';
 import MyRentalsPage from './pages/MyRentalsPage';
+import RentalDetail from './pages/RentalDetail';
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
         <Route path="/games/:id" element={<GameDetailPage />} />
         <Route path="/waitlist" element={<WaitlistPage />} />
         <Route path='/my-rentals' element={<MyRentalsPage />} />
+        <Route path="/rental/:rentalId/extend/:gameId" element={<RentalDetail />} />
+
       </Routes>
   );
 }
