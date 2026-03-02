@@ -46,6 +46,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 ```bash
 npm run dev
 ```
+.
 
 Visit `http://localhost:5173`
 
