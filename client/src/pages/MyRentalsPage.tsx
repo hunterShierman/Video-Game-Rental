@@ -251,7 +251,6 @@ const MyRentalsPage = () => {
                                             <th className="text-left text-gray-400 text-sm font-semibold py-4 px-6">Returned On</th>
                                             <th className="text-left text-gray-400 text-sm font-semibold py-4 px-6">Price</th>
                                             <th className="text-left text-gray-400 text-sm font-semibold py-4 px-6">Status</th>
-                                            <th className="text-left text-gray-400 text-sm font-semibold py-4 px-6">Notification</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -292,29 +291,6 @@ const MyRentalsPage = () => {
 
                                                 <td className='py-4 px-6'>
                                                     {getStatusBadge(rental.status)}
-                                                </td>
-
-                                                <td className='py-4 px-6'>
-                                                    {(rental.status === 'expired' || new Date(rental.end_date).getTime() <= new Date().getTime()) ? (
-                                                        <div className="bg-gradient-to-br from-red-900/20 to-rose-900/10 border border-red-500/30 rounded-xl p-3 min-w-[260px]">
-                                                            <p className="text-red-300 font-bold text-sm mb-1">
-                                                                Well shucks, your rental period is over!
-                                                            </p>
-                                                            <p className="text-gray-300 text-xs leading-relaxed mb-3">
-                                                                Hope you had fun with{' '}
-                                                                <span className="text-white font-semibold">{rental.games.title}</span>.
-                                                                If you didn&apos;t finish the game or want more time, feel free to re-rent it.
-                                                            </p>
-                                                            <button
-                                                                onClick={() => navigate(`/game/${rental.game_id}`)}
-                                                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-colors"
-                                                            >
-                                                                Re-Rent {rental.games.title}
-                                                            </button>
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-gray-500 text-sm">—</span>
-                                                    )}
                                                 </td>
                                             </tr>
                                         ))}
