@@ -2,9 +2,13 @@
 import { Link } from 'react-router-dom';
 import { Gamepad2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
+
 
 function Navbar() {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-indigo-500/20 z-50">
@@ -46,7 +50,7 @@ function Navbar() {
                 {user.email}
               </span>
               <button
-                onClick={() => signOut()}
+                onClick={() => { signOut(); navigate("/"); }}
                 className="bg-slate-800 border border-indigo-500/30 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-700 transition-all"
               >
                 Logout

@@ -141,6 +141,7 @@ export const getMyRentalHistory = async (): Promise<RentalWithGame[]> => {
     .from('rentals')
     .select('*, games(title, image_url, platform)')
     .eq('user_id', user.id)
+    .in('status', ['completed', 'expired'])
     .order('created_at', { ascending: false });
 
   if (error) {
