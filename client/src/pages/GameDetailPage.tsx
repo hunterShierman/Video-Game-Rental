@@ -212,6 +212,14 @@ const GameDetailPage = () => {
                   <CheckCircle className="w-5 h-5 text-green-400" />
                   <h2 className="text-white font-bold text-lg">Rental Confirmed!</h2>
                 </div>
+
+                <p className="text-gray-300 text-sm mb-4">
+                  Hope you are ready to embark on this remarkable journey of{' '}
+                  <span className="text-white font-semibold">{game.title}</span>, young hobbit!
+                  It does last 7 days though, so crank some energy drinks and prepare for
+                  some Cheeto fingers because we’re in for some hardcore gaming!
+                </p>
+                
                 <p className="text-gray-400 text-sm mb-3">Your access key for <span className="text-white font-semibold">{game.title}</span>:</p>
                 <div className="bg-slate-900/60 border border-green-500/20 rounded-xl p-4">
                   <p className="text-2xl font-bold text-green-400 font-mono tracking-wider">{accessKey}</p>
