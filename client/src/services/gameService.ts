@@ -108,3 +108,57 @@ export const getAvailableGames = async (): Promise<Game[]> => {
 
   return data || [];
 };
+
+
+// Get game recommendations based on genres of game in rental history 
+export const getRecommendedGames = async (): Promise<Game[]> => {
+  
+  // Get user
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  // Find genre of associated game
+  const { data: rentals, error: rentalError } = await supabase
+    .from('rentals')
+    .select('game_id, games!inner(genre)')
+    .eq('user_id', user.id);
+
+  if (rentalError) {
+    console.error('Error fetching rentals for recommendations:', rentalError);
+    return [];
+  }
+
+  // No rental history
+  if (!rentals || rentals.length === 0) return [];
+
+  // Find unique game ID/genre
+  const rentedGameIds = rentals.map(r => r.game_id);
+  
+  const genres = [...new Set(rentals.map(r => {
+    // Bypass strict type error
+    const gameData = r.games as any;
+    // Check if Supabase returned an array or object then grab genre
+    return Array.isArray(gameData) ? gameData[0]?.genre : gameData?.genre;
+  }).filter(Boolean))];
+
+  if (genres.length === 0) return [];
+
+  // Get available games matching those genres
+  const { data: matchingGames, error: gamesError } = await supabase
+    .from('games')
+    .select('*')
+    .in('genre', genres)
+    .gt('available_copies', 0); // Only recommend available games
+
+  if (gamesError) {
+    console.error('Error fetching recommended games:', gamesError);
+    return [];
+  }
+
+  // Filter out already rented games and limit to 3
+  const recommended = (matchingGames || [])
+    .filter(game => !rentedGameIds.includes(game.id))
+    .slice(0, 3);
+
+  return recommended;
+};

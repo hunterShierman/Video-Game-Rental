@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, Filter, Gamepad2, Loader2, X } from 'lucide-react';
 import Navbar from '../components/NavBar';
 import GameCard from '../components/GameCard';
+import GameRecommendations from '../components/GameRecommendations';
 import {
   getAllGames,
   getGamesByGenre,
@@ -96,6 +97,8 @@ const BrowsePage = () => {
           <h1 className="text-5xl font-bold text-white mb-3">Browse Games</h1>
           <p className="text-gray-400 text-lg">Rent any game for a week, no commitment required</p>
         </div>
+
+        <GameRecommendations />
 
         {/* Search and Filters */}
         <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-6 mb-8">

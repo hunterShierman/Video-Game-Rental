@@ -33,13 +33,19 @@ export const getWaitlistStatus = async (gameId: string, userId: string) => {
 // 2. Join the waitlist (Calculates position automatically)
 export const joinWaitlist = async (gameId: string, userId: string) => {
   // Step A: Find the last person in line for this game
-  const { data: lastPerson } = await supabase
+  const { data: lastPerson, error: fetchError } = await supabase
     .from('waitlist')
     .select('position')
     .eq('game_id', gameId)
     .order('position', { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  if (fetchError) {
+    console.error('Error fetching last person in line:', fetchError);
+  }
+
+  console.log("DEBUG: Last person found ->", lastPerson);
 
   // Step B: Calculate new position (Last + 1, or 1 if empty)
   const nextPosition = lastPerson ? lastPerson.position + 1 : 1;
