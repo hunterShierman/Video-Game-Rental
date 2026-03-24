@@ -62,9 +62,6 @@ function HomePage() {
               Browse Games
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <button className="text-gray-300 hover:text-white px-8 py-4 rounded-lg font-semibold border border-gray-700 hover:border-indigo-500 transition-all">
-              See How It Works
-            </button>
           </div>
         </div>
       </div>

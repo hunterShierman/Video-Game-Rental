@@ -12,7 +12,6 @@ function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -37,7 +36,6 @@ function Navbar() {
           </span>
         </Link>
 
-        {/* Navigation Links */}
         <div className="flex gap-6 items-center">
           <Link 
             to="/browse-page" 
@@ -47,56 +45,55 @@ function Navbar() {
           </Link>
           
           {user ? (
-            // Logged in state – profile icon dropdown
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={toggleDropdown}
                 className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors focus:outline-none"
                 aria-label="User menu"
               >
-                <UserCircle className="w-8 h-8" />
+                <UserCircle className="w-9 h-9" />
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
-              {/* Dropdown with smooth transition */}
               <div
-                className={`absolute right-0 mt-2 w-56 bg-slate-900 border border-indigo-500/30 rounded-lg shadow-xl py-2 z-50 transform transition-all duration-200 ease-out ${
+                className={`absolute right-0 mt-2 w-72 bg-slate-900 border border-indigo-500/30 rounded-xl shadow-xl py-3 z-50 transform transition-all duration-200 ease-out ${
                   isDropdownOpen
                     ? 'opacity-100 scale-100 pointer-events-auto'
                     : 'opacity-0 scale-95 pointer-events-none'
                 }`}
               >
                 {/* User email */}
-                <div className="px-4 py-2 text-sm text-gray-400 border-b border-indigo-500/20 truncate">
+                <div className="px-5 py-3 text-base text-gray-400 border-b border-indigo-500/20 truncate">
                   {user.email}
                 </div>
 
                 {/* Navigation items */}
                 <Link
                   to="/my-rentals"
-                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
+                  className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   My Rentals
                 </Link>
                 <Link
                   to="/waitlist"
-                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
+                  className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   My Waitlist
                 </Link>
 
-                {/* Divider and centered logout button */}
-                <div className="border-t border-indigo-500/20 mt-2 pt-2 pb-1 px-2">
+                {/* Logout */}
+                <div className="border-t border-indigo-500/20 mt-3 pt-3 pb-2 px-3">
                   <button
                     onClick={() => {
                       signOut();
                       setIsDropdownOpen(false);
+                      navigate('/');
                     }}
-                    className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/30 text-center"
+                    className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-base hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/30 text-center"
                   >
                     Logout
                   </button>
@@ -104,7 +101,6 @@ function Navbar() {
               </div>
             </div>
           ) : (
-            // Logged out state
             <Link 
               to="/login" 
               className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/30"
