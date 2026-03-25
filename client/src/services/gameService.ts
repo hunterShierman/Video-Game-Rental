@@ -2,6 +2,11 @@
 import { supabase } from '../lib/supabaseClient';
 import type { Game } from '../types/definitions';
 
+type RentalGenreJoinRow = {
+  game_id: string;
+  games: { genre: string } | Array<{ genre: string }> | null;
+};
+
 /**
  * Fetch all games from the database
  */
@@ -131,15 +136,16 @@ export const getRecommendedGames = async (): Promise<Game[]> => {
   // No rental history
   if (!rentals || rentals.length === 0) return [];
 
+  const rentalRows = rentals as RentalGenreJoinRow[];
+
   // Find unique game ID/genre
-  const rentedGameIds = rentals.map(r => r.game_id);
+  const rentedGameIds = rentalRows.map((r) => r.game_id);
   
-  const genres = [...new Set(rentals.map(r => {
-    // Bypass strict type error
-    const gameData = r.games as any;
+  const genres = [...new Set(rentalRows.map((r) => {
+    const gameData = r.games;
     // Check if Supabase returned an array or object then grab genre
     return Array.isArray(gameData) ? gameData[0]?.genre : gameData?.genre;
-  }).filter(Boolean))];
+  }).filter((genre): genre is string => Boolean(genre)))];
 
   if (genres.length === 0) return [];
 

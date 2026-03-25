@@ -4,11 +4,15 @@ import { Gamepad2, UserCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
+
+type UserRole = 'Admin' | 'Customer';
 
 
 function Navbar() {
   const { user, signOut } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userRole, setUserRole] = useState<UserRole>('Customer');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -21,6 +25,31 @@ function Navbar() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const loadUserRole = async () => {
+      if (!user) {
+        setUserRole('Customer');
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('role')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching user role:', error);
+        setUserRole('Customer');
+        return;
+      }
+
+      setUserRole(data?.role === 'Admin' ? 'Admin' : 'Customer');
+    };
+
+    void loadUserRole();
+  }, [user]);
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
@@ -70,20 +99,32 @@ function Navbar() {
                 </div>
 
                 {/* Navigation items */}
-                <Link
-                  to="/my-rentals"
-                  className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  My Rentals
-                </Link>
-                <Link
-                  to="/waitlist"
-                  className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  My Waitlist
-                </Link>
+                {userRole === 'Admin' ? (
+                  <Link
+                    to="/admin-dashboard"
+                    className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Admin Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      to="/my-rentals"
+                      className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      My Rentals
+                    </Link>
+                    <Link
+                      to="/waitlist"
+                      className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      My Waitlist
+                    </Link>
+                  </>
+                )}
 
                 {/* Logout */}
                 <div className="border-t border-indigo-500/20 mt-3 pt-3 pb-2 px-3">
