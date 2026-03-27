@@ -114,10 +114,24 @@ export const getAvailableGames = async (): Promise<Game[]> => {
   return data || [];
 };
 
+/**
+ * Fetch trending games
+ */
+export const getTrendingGames = async () => {
+  const { data, error } = await supabase.rpc('get_trending_games');
 
-// Get game recommendations based on genres of game in rental history 
+  if (error) {
+    console.error('Error fetching trending games:', error);
+    throw error;
+  }
+
+  return data || [];
+}; // <-- FIXED: missing bracket added here
+
+/**
+ * Get game recommendations based on genres of games in rental history
+ */
 export const getRecommendedGames = async (): Promise<Game[]> => {
-  
   // Get user
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return [];
@@ -140,12 +154,19 @@ export const getRecommendedGames = async (): Promise<Game[]> => {
 
   // Find unique game ID/genre
   const rentedGameIds = rentalRows.map((r) => r.game_id);
-  
-  const genres = [...new Set(rentalRows.map((r) => {
-    const gameData = r.games;
-    // Check if Supabase returned an array or object then grab genre
-    return Array.isArray(gameData) ? gameData[0]?.genre : gameData?.genre;
-  }).filter((genre): genre is string => Boolean(genre)))];
+
+  const genres = [
+    ...new Set(
+      rentalRows
+        .map((r) => {
+          const gameData = r.games;
+          return Array.isArray(gameData)
+            ? gameData[0]?.genre
+            : gameData?.genre;
+        })
+        .filter((genre): genre is string => Boolean(genre))
+    ),
+  ];
 
   if (genres.length === 0) return [];
 
@@ -154,7 +175,7 @@ export const getRecommendedGames = async (): Promise<Game[]> => {
     .from('games')
     .select('*')
     .in('genre', genres)
-    .gt('available_copies', 0); // Only recommend available games
+    .gt('available_copies', 0);
 
   if (gamesError) {
     console.error('Error fetching recommended games:', gamesError);
@@ -163,69 +184,8 @@ export const getRecommendedGames = async (): Promise<Game[]> => {
 
   // Filter out already rented games and limit to 3
   const recommended = (matchingGames || [])
-    .filter(game => !rentedGameIds.includes(game.id))
+    .filter((game) => !rentedGameIds.includes(game.id))
     .slice(0, 3);
 
   return recommended;
-};
-
-/**
- * Create a new game (admin only)
- */
-export const createGame = async (input: CreateGameInput): Promise<Game> => {
-  const { data, error } = await supabase
-    .from('games')
-    .insert({
-      title: input.title,
-      description: input.description ?? null,
-      genre: input.genre,
-      platform: input.platform,
-      price: input.price,
-      image_url: input.image_url ?? null,
-      total_copies: input.total_copies ?? 1,
-      available_copies: input.available_copies ?? input.total_copies ?? 1,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Error creating game:', error);
-    throw error;
-  }
-
-  return data;
-};
-
-/**
- * Update a game (admin only)
- */
-export const updateGame = async (id: string, input: UpdateGameInput): Promise<Game> => {
-  const { data, error } = await supabase
-    .from('games')
-    .update(input)
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Error updating game:', error);
-    throw error;
-  }
-
-  return data;
-};
-
-/**
- * Hard delete a game (admin only)
- */
-export const deleteGame = async (id: string): Promise<void> => {
-  const { error } = await supabase
-    .from('games')
-    .delete()
-    .eq('id', id);
-
-  if (error) {
-    console.error('Error deleting game:', error);
-    throw error;
-  }
 };
