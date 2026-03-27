@@ -1,6 +1,6 @@
 // src/services/gameService.ts
 import { supabase } from '../lib/supabaseClient';
-import type { Game } from '../types/definitions';
+import type { Game, CreateGameInput, UpdateGameInput } from '../types/definitions';
 
 type RentalGenreJoinRow = {
   game_id: string;
