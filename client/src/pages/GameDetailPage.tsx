@@ -201,10 +201,7 @@ const GameDetailPage = () => {
                 ))}
               </div>
             </div>
-            {/* Reviews */}
-            <div className="mt-6">
-              <ReviewsSection gameId={game.id} />
-            </div>
+
             {/* Success state — show access key */}
             {success && accessKey && (
               <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/10 border border-green-500/30 rounded-2xl p-6">
@@ -293,6 +290,12 @@ const GameDetailPage = () => {
               <Waitlist gameId={game.id} gameTitle={game.title} />
             )
             )}
+
+            {/* Reviews */}
+            <div className="mt-6">
+              <ReviewsSection gameId={game.id} />
+            </div>
+            
           </div>
         </div>
       </div>
