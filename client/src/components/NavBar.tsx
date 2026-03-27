@@ -100,13 +100,22 @@ function Navbar() {
 
                 {/* Navigation items */}
                 {userRole === 'Admin' ? (
-                  <Link
-                    to="/admin-dashboard"
-                    className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    Admin Dashboard
-                  </Link>
+                  <>
+                    <Link
+                      to="/admin-dashboard"
+                      className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                    <Link
+                      to="/admin-games"
+                      className="block px-5 py-3 text-base text-gray-300 hover:bg-indigo-600/20 hover:text-white transition-colors"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      Manage Games
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <Link

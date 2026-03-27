@@ -1,6 +1,6 @@
 // src/services/gameService.ts
 import { supabase } from '../lib/supabaseClient';
-import type { Game } from '../types/definitions';
+import type { Game, CreateGameInput, UpdateGameInput } from '../types/definitions';
 
 type RentalGenreJoinRow = {
   game_id: string;
@@ -167,4 +167,65 @@ export const getRecommendedGames = async (): Promise<Game[]> => {
     .slice(0, 3);
 
   return recommended;
+};
+
+/**
+ * Create a new game (admin only)
+ */
+export const createGame = async (input: CreateGameInput): Promise<Game> => {
+  const { data, error } = await supabase
+    .from('games')
+    .insert({
+      title: input.title,
+      description: input.description ?? null,
+      genre: input.genre,
+      platform: input.platform,
+      price: input.price,
+      image_url: input.image_url ?? null,
+      total_copies: input.total_copies ?? 1,
+      available_copies: input.available_copies ?? input.total_copies ?? 1,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error creating game:', error);
+    throw error;
+  }
+
+  return data;
+};
+
+/**
+ * Update a game (admin only)
+ */
+export const updateGame = async (id: string, input: UpdateGameInput): Promise<Game> => {
+  const { data, error } = await supabase
+    .from('games')
+    .update(input)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating game:', error);
+    throw error;
+  }
+
+  return data;
+};
+
+/**
+ * Hard delete a game (admin only)
+ */
+export const deleteGame = async (id: string): Promise<void> => {
+  const { error } = await supabase
+    .from('games')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting game:', error);
+    throw error;
+  }
 };
