@@ -11,7 +11,6 @@ import {
   Users,
   BarChart3,
 } from 'lucide-react';
-
 type StatCard = {
   label: string;
   value: string;
@@ -39,28 +38,12 @@ type DashboardData = {
   totalTransactions: number;
 };
 
-const emptyData: DashboardData = {
-  genrePopularity: [],
-  gamePopularity: [],
-  waitlistLengths: [],
-  monthlyRevenue: [0, 0, 0, 0, 0, 0],
-  mostPopularGenre: { name: 'N/A', count: 0 },
-  leastPopularGenre: { name: 'N/A', count: 0 },
-  mostPopularGame: { name: 'N/A', count: 0 },
-  leastPopularGame: { name: 'N/A', count: 0 },
-  longestWaitlist: { name: 'N/A', count: 0 },
-  totalRevenue: 0,
-  totalTransactions: 0,
-};
-
 const countBy = (items: string[]) => {
   const map: Record<string, number> = {};
-
   items.forEach((value) => {
     if (!value) return;
     map[value] = (map[value] || 0) + 1;
   });
-
   return map;
 };
 
@@ -87,7 +70,6 @@ const isInCurrentMonth = (value: string | null) => {
   if (!value) return false;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return false;
-
   const now = new Date();
   return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
 };
@@ -95,21 +77,31 @@ const isInCurrentMonth = (value: string | null) => {
 const buildCurrentMonthWeeklyRevenue = (transactions: TransactionsLite[]) => {
   const now = new Date();
   const buckets: number[] = [0, 0, 0, 0, 0, 0];
-
   transactions.forEach((row) => {
     if (!row.created_at || !row.amount) return;
-
     const txDate = new Date(row.created_at);
     if (Number.isNaN(txDate.getTime())) return;
-
     if (txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear()) {
       const day = txDate.getDate();
       const weekOfMonth = Math.min(Math.floor((day - 1) / 7), 5);
       buckets[weekOfMonth] += Number(row.amount);
     }
   });
-
   return buckets;
+};
+
+const emptyData: DashboardData = {
+  genrePopularity: [],
+  gamePopularity: [],
+  waitlistLengths: [],
+  monthlyRevenue: [0, 0, 0, 0, 0, 0],
+  mostPopularGenre: { name: 'N/A', count: 0 },
+  leastPopularGenre: { name: 'N/A', count: 0 },
+  mostPopularGame: { name: 'N/A', count: 0 },
+  leastPopularGame: { name: 'N/A', count: 0 },
+  longestWaitlist: { name: 'N/A', count: 0 },
+  totalRevenue: 0,
+  totalTransactions: 0,
 };
 
 function PercentageBar({ value, max, color }: { value: number; max: number; color: string }) {
