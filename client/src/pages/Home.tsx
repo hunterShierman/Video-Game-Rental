@@ -1,11 +1,31 @@
 // src/pages/HomePage.tsx
 import { Link } from 'react-router-dom';
 import { Gamepad2, Key, Star, Clock, Check, ArrowRight, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Faizaan: extended import added useEffect
 import Navbar from '../components/NavBar';
+import type { Game } from '../types/definitions';
+import GameCard from '../components/GameCard';
+import { getTrendingGames } from '../services/gameService';
 
 function HomePage() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [trendingGames, setTrendingGames] = useState<Game[]>([]); // Faizaan: Added both these const
+  const [trendingLoading, setTrendingLoading] = useState(true); // second one
+
+  useEffect(() => {  //Faizaan: Added this useEffect
+    const loadTrendingGames = async () => {
+      try {
+        const data = await getTrendingGames();
+        setTrendingGames(data);
+      } catch (error) {
+        console.error('Failed to load trending games:', error);
+      } finally {
+        setTrendingLoading(false);
+      }
+    };
+
+    loadTrendingGames();
+  }, []); //Faizaan: it ends here
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
@@ -33,7 +53,7 @@ function HomePage() {
           </h1>
 
           <p className="text-xl text-gray-300 mb-4 max-w-3xl mx-auto">
-            Why commit to expensive game purchases? Rent any game, play for a week, 
+            Why commit to expensive game purchases? Rent any game, play for a week,
             and only pay for what you actually use.
           </p>
 
@@ -55,7 +75,7 @@ function HomePage() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
+            <Link
               to="/browse-page"
               className="group bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:from-indigo-500 hover:to-purple-500 transition-all transform hover:scale-105 shadow-2xl shadow-indigo-500/50 flex items-center gap-2"
             >
@@ -64,6 +84,30 @@ function HomePage() {
             </Link>
           </div>
         </div>
+      </div>
+      
+      {/*Trending Games Section - Faizaan*/}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-4xl font-bold text-white mb-2">🔥 Trending Games</h2>
+            <p className="text-gray-400">
+              Most rented games right now
+            </p>
+          </div>
+        </div>
+
+        {trendingLoading ? (
+          <div className="text-gray-400">Loading trending games...</div>
+        ) : trendingGames.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {trendingGames.map((game) => (
+              <GameCard key={game.id} game={game} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-gray-400">No trending games available right now.</div>
+        )}
       </div>
 
       {/* Live Activity Ticker */}
@@ -87,7 +131,7 @@ function HomePage() {
         </div>
       </div>
 
-        {/* Features Section */}
+      {/* Features Section */}
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-white mb-4">Everything You Need</h2>
@@ -115,7 +159,7 @@ function HomePage() {
               stats: "4.8★ Rated"
             }
           ].map((feature, index) => (
-            <div 
+            <div
               key={index}
               onMouseEnter={() => setHoveredCard(index)}
               onMouseLeave={() => setHoveredCard(null)}
@@ -123,7 +167,7 @@ function HomePage() {
             >
               {/* Gradient Glow on Hover */}
               <div className={`absolute inset-0 bg-gradient-to-br from-indigo-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity -z-10`} />
-              
+
               <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 {feature.icon}
               </div>
@@ -181,7 +225,7 @@ function HomePage() {
               description: "Enjoy the game and share your experience with the community"
             }
           ].map((item, index) => (
-            <div 
+            <div
               key={index}
               className="relative group h-full"
             >
@@ -189,7 +233,7 @@ function HomePage() {
               {index < 3 && (
                 <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-indigo-500/50 to-transparent -z-10" />
               )}
-              
+
               <div className="bg-gradient-to-br from-slate-900/50 to-slate-800/30 border border-indigo-500/20 rounded-2xl p-8 hover:border-indigo-500/50 transition-all hover:transform hover:scale-105 h-full">
                 <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 text-indigo-400 group-hover:scale-110 transition-transform">
                   {item.icon}
