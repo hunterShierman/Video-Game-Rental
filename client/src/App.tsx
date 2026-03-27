@@ -13,6 +13,7 @@ import GameDetailPage from './pages/GameDetailPage';
 import MyRentalsPage from './pages/MyRentalsPage';
 import RentalDetail from './pages/RentalDetail';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminGamesPage from './pages/AdminGamesPage';
 
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
         <Route path="/test" element={<SupabaseTest />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/update-password" element={<UpdatePasswordPage />} /> 
+        <Route path="/update-password" element={<UpdatePasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/rental-test" element={<RentalTestPage />} />
         <Route path="/browse-page" element={<BrowsePage />} />
@@ -31,6 +32,7 @@ function App() {
         <Route path='/my-rentals' element={<MyRentalsPage />} />
         <Route path="/rental/:rentalId/extend/:gameId" element={<RentalDetail />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/admin-games" element={<AdminGamesPage />} />
 
       </Routes>
   );
