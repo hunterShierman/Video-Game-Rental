@@ -247,65 +247,6 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Comparison Table */}
-      <div className="max-w-6xl mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Why Rent Instead of Buy?</h2>
-          <p className="text-gray-400 text-lg">Compare your options and save money</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 border border-indigo-500/30 rounded-2xl overflow-hidden">
-          <div className="grid grid-cols-4 gap-px bg-indigo-500/10">
-            {/* Header */}
-            <div className="bg-slate-900 p-6"></div>
-            <div className="bg-slate-900 p-6 text-center">
-              <div className="text-gray-400 font-semibold">Buy Game</div>
-            </div>
-            <div className="bg-slate-900 p-6 text-center">
-              <div className="text-gray-400 font-semibold">Subscription</div>
-            </div>
-            <div className="bg-gradient-to-br from-indigo-900/50 to-purple-900/30 p-6 text-center relative">
-              <div className="absolute top-2 right-2">
-                <span className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold">BEST VALUE</span>
-              </div>
-              <div className="text-white font-bold">Our Rental</div>
-            </div>
-
-            {/* Cost */}
-            <div className="bg-slate-900/50 p-6 font-semibold text-white">Cost</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">$90 upfront</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">$15/month</div>
-            <div className="bg-slate-900/50 p-6 text-center">
-              <span className="text-green-400 font-bold">$5-10/week</span>
-            </div>
-
-            {/* Commitment */}
-            <div className="bg-slate-900/50 p-6 font-semibold text-white">Commitment</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Forever</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Monthly</div>
-            <div className="bg-slate-900/50 p-6 text-center">
-              <span className="text-green-400 font-bold">1 week only</span>
-            </div>
-
-            {/* Selection */}
-            <div className="bg-slate-900/50 p-6 font-semibold text-white">Selection</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">1 game</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Limited library</div>
-            <div className="bg-slate-900/50 p-6 text-center">
-              <span className="text-green-400 font-bold">Full library</span>
-            </div>
-
-            {/* Risk */}
-            <div className="bg-slate-900/50 p-6 font-semibold text-white">Risk</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">High</div>
-            <div className="bg-slate-900/50 p-6 text-center text-gray-300">Medium</div>
-            <div className="bg-slate-900/50 p-6 text-center">
-              <span className="text-green-400 font-bold">Zero</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Footer */}
       <footer className="border-t border-indigo-900/30 bg-slate-950/50">
         <div className="max-w-7xl mx-auto px-6 py-12">
