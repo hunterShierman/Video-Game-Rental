@@ -15,12 +15,12 @@ const GameCard = ({ game }: GameCardProps) => {
       onClick={() => navigate(`/games/${game.id}`)}
       className="group bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/20 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all hover:transform hover:scale-[1.02] cursor-pointer relative"
     >
-      <div className="relative h-48 bg-slate-800/60 overflow-hidden">
+      <div className="relative h-64 bg-slate-800/60 overflow-hidden">
         {game.image_url ? (
           <img
             src={game.image_url}
             alt={game.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -71,7 +71,6 @@ const GameCard = ({ game }: GameCardProps) => {
           <span className="text-indigo-400 text-sm font-semibold group-hover:text-indigo-300 transition-colors">
             View details →
           </span>
-          
         </div>
       </div>
     </div>
