@@ -108,3 +108,18 @@ export const getAvailableGames = async (): Promise<Game[]> => {
 
   return data || [];
 };
+
+/**
+ * Fetch trending games
+ */
+
+export const getTrendingGames = async () => {
+  const { data, error } = await supabase.rpc('get_trending_games');
+
+  if (error) {
+    console.error('Error fetching trending games:', error);
+    throw error;
+  }
+
+  return data || [];
+};
