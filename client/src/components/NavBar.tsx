@@ -96,6 +96,9 @@ function Navbar() {
                 {/* User email */}
                 <div className="px-5 py-3 text-base text-gray-400 border-b border-indigo-500/20 truncate">
                   {user.email}
+                  {userRole === 'Admin' && (
+                    <span className="block text-xs font-semibold text-indigo-400 mt-1">Admin Account</span>
+                  )}
                 </div>
 
                 {/* Navigation items */}
