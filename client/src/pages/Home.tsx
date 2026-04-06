@@ -90,7 +90,7 @@ function HomePage() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-2">🔥 Trending Games</h2>
+            <h2 className="text-4xl font-bold text-white mb-2">Trending Games</h2>
             <p className="text-gray-400">
               Most rented games right now
             </p>

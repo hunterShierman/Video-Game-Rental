@@ -53,12 +53,11 @@ export const canCurrentUserReview = async (gameId: string): Promise<boolean> => 
     .select("id")
     .eq("user_id", user.id)
     .eq("game_id", gameId)
-    // include all possible statuses in your project
     .in("status", ["active", "expired", "extended"])
-    .maybeSingle();
+    .limit(1);
 
   if (error) throw error;
-  return data !== null;
+  return Array.isArray(data) && data.length > 0;
 };
 
 /** Create OR update your review (works even if DB doesn't have a unique constraint) */

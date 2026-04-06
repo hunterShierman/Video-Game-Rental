@@ -15,7 +15,7 @@ function useAsyncData<T>(
       setError(null);
       fetcher()
         .then(setData)
-        .catch((e) => setError(e instanceof Error ? e.message : 'An error occurred'))
+        .catch((e) => setError(e instanceof Error ? e.message : (e?.message ?? 'An error occurred')))
         .finally(() => setLoading(false));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
