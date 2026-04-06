@@ -23,6 +23,7 @@ const BrowsePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('');
+  const [selectedEra, setSelectedEra] = useState('');
   const [availableOnly, setAvailableOnly] = useState(false);
 
   const { data: allGames } = useAsyncData(() => getAllGames(), []);
@@ -51,6 +52,11 @@ const BrowsePage = () => {
           data = data.filter((g) => g.available_copies > 0);
         }
 
+        if (selectedEra) {
+          const [start, end] = selectedEra === '70s' ? [1970, 1979] : selectedEra === '80s' ? [1980, 1989] : [1990, 1999];
+          data = data.filter((g) => g.release_year !== null && g.release_year >= start && g.release_year <= end);
+        }
+
         setGames(data);
       } catch (err) {
         console.error('Error applying filters:', err);
@@ -60,16 +66,17 @@ const BrowsePage = () => {
     };
 
     applyFilters();
-  }, [searchTerm, selectedGenre, selectedPlatform, availableOnly]);
+  }, [searchTerm, selectedGenre, selectedPlatform, selectedEra, availableOnly]);
 
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedGenre('');
     setSelectedPlatform('');
+    setSelectedEra('');
     setAvailableOnly(false);
   };
 
-  const hasActiveFilters = searchTerm || selectedGenre || selectedPlatform || availableOnly;
+  const hasActiveFilters = searchTerm || selectedGenre || selectedPlatform || selectedEra || availableOnly;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
@@ -119,6 +126,17 @@ const BrowsePage = () => {
               {platforms.map((p) => (
                 <option key={p} value={p}>{p}</option>
               ))}
+            </select>
+
+            <select
+              value={selectedEra}
+              onChange={(e) => setSelectedEra(e.target.value)}
+              className="bg-slate-800/60 border border-indigo-500/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500/60 transition-colors"
+            >
+              <option value="">All Eras</option>
+              <option value="70s">70s (1970–1979)</option>
+              <option value="80s">80s (1980–1989)</option>
+              <option value="90s">90s (1990–1999)</option>
             </select>
 
             <button

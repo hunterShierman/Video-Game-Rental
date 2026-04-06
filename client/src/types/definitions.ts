@@ -7,6 +7,7 @@ export interface Game {
   description: string | null;
   genre: string;
   platform: string;
+  release_year: number | null;
   price: number;
   image_url: string | null;
   available: boolean;
@@ -23,6 +24,7 @@ export interface CreateGameInput {
   description?: string;
   genre: string;
   platform: string;
+  release_year?: number;
   price: number;
   image_url?: string;
   total_copies?: number;
@@ -35,6 +37,7 @@ export interface UpdateGameInput {
   description?: string;
   genre?: string;
   platform?: string;
+  release_year?: number | null;
   price?: number;
   image_url?: string;
   available?: boolean;
@@ -158,6 +161,7 @@ export interface User {
 export interface GameFilters {
   genre?: string;
   platform?: string;
+  era?: string;
   minPrice?: number;
   maxPrice?: number;
   availableOnly?: boolean;

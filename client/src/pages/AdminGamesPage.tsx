@@ -36,13 +36,18 @@ const GENRE_OPTIONS = [
 ];
 
 const PLATFORM_OPTIONS = [
-  'PC',
-  'PlayStation 5',
-  'PlayStation 4',
-  'Xbox Series X',
-  'Xbox One',
-  'Nintendo Switch',
-  'Multi-Platform',
+  'Arcade',
+  'Atari 2600',
+  'Atari 7800',
+  'NES',
+  'Sega Master System',
+  'Game Boy',
+  'Sega Genesis',
+  'Super Nintendo (SNES)',
+  'Game Boy Color',
+  'Nintendo 64',
+  'PlayStation',
+  'Sega Saturn',
   'Other',
 ];
 
@@ -51,6 +56,7 @@ const emptyForm: CreateGameInput = {
   description: '',
   genre: '',
   platform: '',
+  release_year: undefined,
   price: 0,
   image_url: '',
   total_copies: 1,
@@ -109,6 +115,7 @@ function AdminGamesPage() {
       description: game.description ?? '',
       genre: game.genre,
       platform: game.platform,
+      release_year: game.release_year ?? undefined,
       price: game.price,
       image_url: game.image_url ?? '',
       total_copies: game.total_copies,
@@ -132,8 +139,8 @@ function AdminGamesPage() {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: name === 'price' || name === 'total_copies' || name === 'available_copies'
-        ? Number(value)
+      [name]: name === 'price' || name === 'total_copies' || name === 'available_copies' || name === 'release_year'
+        ? (value === '' ? undefined : Number(value))
         : value,
     }));
   };
@@ -171,6 +178,7 @@ function AdminGamesPage() {
           description: finalForm.description || undefined,
           genre: finalForm.genre,
           platform: finalForm.platform,
+          release_year: finalForm.release_year ?? null,
           price: finalForm.price,
           image_url: finalForm.image_url || undefined,
           total_copies: finalForm.total_copies,
@@ -260,11 +268,12 @@ function AdminGamesPage() {
           ) : (
             <div className="grid gap-3">
               {/* Table header */}
-              <div className="hidden md:grid md:grid-cols-[80px_2fr_1fr_1fr_100px_80px_80px_120px] gap-4 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <div className="hidden md:grid md:grid-cols-[80px_2fr_1fr_1fr_70px_100px_80px_80px_120px] gap-4 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
                 <span>Image</span>
                 <span>Title</span>
                 <span>Genre</span>
                 <span>Platform</span>
+                <span>Year</span>
                 <span>Price</span>
                 <span>Copies</span>
                 <span>Avail.</span>
@@ -274,7 +283,7 @@ function AdminGamesPage() {
               {filteredGames.map((game) => (
                 <div
                   key={game.id}
-                  className="grid grid-cols-1 md:grid-cols-[80px_2fr_1fr_1fr_100px_80px_80px_120px] gap-4 items-center px-5 py-4 rounded-xl border border-indigo-500/20 bg-slate-900/50 hover:border-indigo-500/40 transition-colors"
+                  className="grid grid-cols-1 md:grid-cols-[80px_2fr_1fr_1fr_70px_100px_80px_80px_120px] gap-4 items-center px-5 py-4 rounded-xl border border-indigo-500/20 bg-slate-900/50 hover:border-indigo-500/40 transition-colors"
                 >
                   {/* Image */}
                   <div className="w-16 h-16 rounded-lg overflow-hidden bg-slate-800/60 shrink-0">
@@ -309,6 +318,12 @@ function AdminGamesPage() {
                   <span className="text-sm text-gray-300">
                     <span className="md:hidden text-gray-500 mr-1">Platform:</span>
                     {game.platform}
+                  </span>
+
+                  {/* Year */}
+                  <span className="text-sm text-gray-300">
+                    <span className="md:hidden text-gray-500 mr-1">Year:</span>
+                    {game.release_year ?? '—'}
                   </span>
 
                   {/* Price */}
@@ -439,6 +454,23 @@ function AdminGamesPage() {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              {/* Release Year */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  Release Year <span className="text-gray-500 font-normal">(1970–1999)</span>
+                </label>
+                <input
+                  name="release_year"
+                  type="number"
+                  min="1970"
+                  max="1999"
+                  value={form.release_year ?? ''}
+                  onChange={handleFormChange}
+                  placeholder="e.g. 1994"
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-900/80 border border-indigo-500/20 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/50"
+                />
               </div>
 
               {/* Price + Copies row */}

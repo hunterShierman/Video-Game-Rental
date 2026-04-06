@@ -38,7 +38,7 @@ const GameCard = ({ game }: GameCardProps) => {
         </div>
 
         <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-gray-300 border border-slate-700/50">
-          {game.platform}
+          {game.platform}{game.release_year ? ` · ${game.release_year}` : ''}
         </div>
       </div>
 

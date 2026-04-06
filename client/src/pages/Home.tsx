@@ -38,30 +38,30 @@ function HomePage() {
           {/* Trust Badge */}
           <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 rounded-full px-4 py-2 mb-6 animate-fade-in">
             <Sparkles className="w-4 h-4 text-indigo-400" />
-            <span className="text-sm text-indigo-300 font-medium">Join 10,000+ gamers saving money</span>
+            <span className="text-sm text-indigo-300 font-medium">500+ retro classics from NES to PS2</span>
           </div>
 
           {/* Main Headline with Hover Float Animation */}
-          <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-normal">
             <span className="inline-block hover:animate-float transition-transform duration-300">
-              Play AAA Games for
+              Rent Retro Games,
             </span>
             <br />
-            <span className="inline-block hover:animate-float transition-transform duration-300 delay-75 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              $5/Week, Not $90 Forever
+            <span className="inline-block hover:animate-float transition-transform duration-300 delay-75 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent pb-4">
+              Skip the Cartridge Hunt
             </span>
           </h1>
 
           <p className="text-xl text-gray-300 mb-4 max-w-3xl mx-auto">
-            Why commit to expensive game purchases? Rent any game, play for a week,
-            and only pay for what you actually use.
+            Why hunt down old cartridges or pay collector prices? Rent the classics you loved,
+            or discover the ones you missed, and only pay for what you actually play.
           </p>
 
           {/* Social Proof Numbers */}
           <div className="flex justify-center gap-8 mb-8 text-sm text-gray-400">
             <div className="flex items-center gap-2">
               <Check className="w-4 h-4 text-green-400" />
-              <span>15,000+ rentals</span>
+              <span>15,000+ classics rented</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="w-4 h-4 text-green-400" />
@@ -92,7 +92,7 @@ function HomePage() {
           <div>
             <h2 className="text-4xl font-bold text-white mb-2">Trending Games</h2>
             <p className="text-gray-400">
-              Most rented games right now
+              Most rented classics right now
             </p>
           </div>
         </div>
@@ -114,15 +114,15 @@ function HomePage() {
       <div className="bg-gradient-to-r from-indigo-900/20 to-purple-900/20 border-y border-indigo-500/20 py-4 overflow-hidden">
         <div className="flex gap-12 animate-scroll whitespace-nowrap">
           {[
-            "🎮 Sarah just rented Elden Ring",
-            "⭐ Mike reviewed Baldur's Gate 3 - 5 stars",
-            "🎮 Alex added Cyberpunk 2077 to waitlist",
-            "⭐ Emma rented Hogwarts Legacy",
-            "🎮 Tom just started playing Spider-Man 2"
+            "🕹️ Sarah just rented Super Mario Bros 3",
+            "⭐ Mike reviewed The Legend of Zelda: A Link to the Past - 5 stars",
+            "🕹️ Alex added Sonic the Hedgehog 2 to waitlist",
+            "⭐ Emma rented Street Fighter II",
+            "🕹️ Tom just started playing Donkey Kong Country"
           ].concat([
-            "🎮 Sarah just rented Elden Ring",
-            "⭐ Mike reviewed Baldur's Gate 3 - 5 stars",
-            "🎮 Alex added Cyberpunk 2077 to waitlist"
+            "🕹️ Sarah just rented Super Mario Bros 3",
+            "⭐ Mike reviewed The Legend of Zelda: A Link to the Past - 5 stars",
+            "🕹️ Alex added Sonic the Hedgehog 2 to waitlist"
           ]).map((activity, i) => (
             <span key={i} className="text-gray-400 text-sm font-medium">
               {activity}
@@ -135,7 +135,7 @@ function HomePage() {
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-white mb-4">Everything You Need</h2>
-          <p className="text-gray-400 text-lg">A complete gaming rental experience</p>
+          <p className="text-gray-400 text-lg">A complete retro gaming rental experience</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -143,19 +143,19 @@ function HomePage() {
             {
               icon: <Gamepad2 className="w-7 h-7 text-indigo-400" />,
               title: "Browse & Filter",
-              description: "Explore our extensive library with advanced filtering by genre, platform, and ratings. Find exactly what you're looking for in seconds.",
-              stats: "500+ Games"
+              description: "Explore our retro library with filtering by genre, console, and era. Find NES gems, SNES classics, N64 hits, and more in seconds.",
+              stats: "500+ Classics"
             },
             {
               icon: <Key className="w-7 h-7 text-purple-400" />,
               title: "Instant Access Keys",
-              description: "Get unique rental keys delivered instantly via email. Keys automatically expire at the end of your rental period for fairness.",
+              description: "Get unique rental keys delivered instantly via email. Keys automatically expire at the end of your rental period, no cartridge hunting required.",
               stats: "Secure Key"
             },
             {
               icon: <Star className="w-7 h-7 text-pink-400" />,
               title: "User Reviews",
-              description: "Read honest reviews from real gamers. Share your experiences and help others discover their next favorite game.",
+              description: "Read honest reviews from real retro gamers. Share your experiences and help others rediscover the classics that defined gaming.",
               stats: "4.8★ Rated"
             }
           ].map((feature, index) => (
@@ -204,13 +204,13 @@ function HomePage() {
               step: "01",
               icon: <Gamepad2 className="w-8 h-8" />,
               title: "Browse Games",
-              description: "Filter by genre, platform, and rating to find your next adventure"
+              description: "Filter by genre, console era, and rating to find your next retro adventure"
             },
             {
               step: "02",
               icon: <Clock className="w-8 h-8" />,
               title: "Rent for a Week",
-              description: "Pay $5-10 depending on game popularity. No commitment required"
+              description: "Pay $3-7 depending on game rarity. No commitment, no cartridge shipping"
             },
             {
               step: "03",
@@ -222,7 +222,7 @@ function HomePage() {
               step: "04",
               icon: <Star className="w-8 h-8" />,
               title: "Play & Review",
-              description: "Enjoy the game and share your experience with the community"
+              description: "Relive the nostalgia and share your take with the retro gaming community"
             }
           ].map((item, index) => (
             <div
@@ -258,12 +258,12 @@ function HomePage() {
                 </div>
                 <span>GameRent</span>
               </div>
-              <p className="text-gray-400 text-sm">Affordable gaming for everyone. Rent, play, review.</p>
+              <p className="text-gray-400 text-sm">Retro gaming for everyone. Rent, play, relive.</p>
             </div>
           </div>
 
           <div className="border-t border-indigo-900/30 pt-8 text-center text-gray-500 text-sm">
-            <p>© 2026 GameRent. All rights reserved. Making gaming accessible and affordable.</p>
+            <p>© 2026 GameRent. All rights reserved. Making retro gaming accessible and affordable.</p>
           </div>
         </div>
       </footer>

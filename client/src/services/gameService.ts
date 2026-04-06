@@ -201,6 +201,7 @@ export const createGame = async (input: CreateGameInput): Promise<Game> => {
       description: input.description ?? null,
       genre: input.genre,
       platform: input.platform,
+      release_year: input.release_year ?? null,
       price: input.price,
       image_url: input.image_url ?? null,
       total_copies: input.total_copies ?? 1,

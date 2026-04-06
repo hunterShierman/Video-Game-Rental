@@ -155,6 +155,7 @@ const GameDetailPage = () => {
                 {[
                   { label: 'Platform', value: game.platform, icon: <Gamepad2 className="w-4 h-4 text-indigo-400" /> },
                   { label: 'Genre', value: game.genre, icon: <Star className="w-4 h-4 text-yellow-400" /> },
+                  ...(game.release_year ? [{ label: 'Release Year', value: String(game.release_year), icon: <Clock3 className="w-4 h-4 text-gray-400" /> }] : []),
                   { label: 'Rental Duration', value: `${RENTAL_DURATION_DAYS} days`, icon: <Clock className="w-4 h-4 text-purple-400" /> },
                   { label: 'Copies Available', value: `${game.available_copies} / ${game.total_copies}`, icon: <Users className="w-4 h-4 text-green-400" /> },
                   { label: 'Popularity Score', value: String(game.popularity_score), icon: <Star className="w-4 h-4 text-pink-400" /> },
