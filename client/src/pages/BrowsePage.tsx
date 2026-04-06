@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import useAsyncData from '../hooks/useAsyncData';
 import { Search, Filter, Gamepad2, Loader2, X } from 'lucide-react';
 import Navbar from '../components/NavBar';
 import GameCard from '../components/GameCard';
@@ -23,26 +24,10 @@ const BrowsePage = () => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('');
   const [availableOnly, setAvailableOnly] = useState(false);
-  const [genres, setGenres] = useState<string[]>([]);
-  const [platforms, setPlatforms] = useState<string[]>([]);
 
-  const loadGames = async () => {
-    setLoading(true);
-    try {
-      const data = await getAllGames();
-      setGames(data);
-      setGenres(getUniqueValues(data, 'genre'));
-      setPlatforms(getUniqueValues(data, 'platform'));
-    } catch (err) {
-      console.error('Error loading games:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadGames();
-  }, []);
+  const { data: allGames } = useAsyncData(() => getAllGames(), []);
+  const genres = useMemo(() => (allGames ? getUniqueValues(allGames, 'genre') : []), [allGames]);
+  const platforms = useMemo(() => (allGames ? getUniqueValues(allGames, 'platform') : []), [allGames]);
 
   useEffect(() => {
     const applyFilters = async () => {

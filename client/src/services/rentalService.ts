@@ -2,6 +2,7 @@
 import { supabase } from '../lib/supabaseClient';
 import type { Rental, RentalWithGame, CreateRentalInput, ExtensionEligibility } from '../types/definitions';
 import { RENTAL_DURATION_DAYS, EXTENSION_DURATION_DAYS, EXTENSION_WINDOW_DAYS } from '../utils/constants';
+import { getAuthenticatedUser } from '../utils/auth';
 
 // Generates a rental access key in the format RENT-XXXX-XXXX-XXXX
 const generateAccessKey = (): string => {
@@ -19,8 +20,7 @@ const getRentalEndDate = (): string => {
 // Checks if the current user already has an active rental for a given game
 // Call this before rentGame() to avoid duplicates
 export const hasActiveRental = async (gameId: string): Promise<boolean> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   const { data, error } = await supabase
     .from('rentals')
@@ -46,8 +46,7 @@ export const hasActiveRental = async (gameId: string): Promise<boolean> => {
 // 5. Decrement available_copies
 // 6. Log the transaction
 export const rentGame = async (gameId: string): Promise<Rental> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   const alreadyRented = await hasActiveRental(gameId);
   if (alreadyRented) throw new Error('You already have an active rental for this game');
@@ -115,8 +114,7 @@ export const rentGame = async (gameId: string): Promise<Rental> => {
 // Fetches active rentals for the current user, joined with basic game info
 // Sorted by end_date so soonest expiring shows first
 export const getMyActiveRentals = async (): Promise<RentalWithGame[]> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   const { data, error } = await supabase
     .from('rentals')
@@ -135,8 +133,7 @@ export const getMyActiveRentals = async (): Promise<RentalWithGame[]> => {
 
 // Fetches full rental history for the current user, newest first
 export const getMyRentalHistory = async (): Promise<RentalWithGame[]> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   const { data, error } = await supabase
     .from('rentals')
@@ -157,8 +154,7 @@ export const getMyRentalHistory = async (): Promise<RentalWithGame[]> => {
 // Returns eligibility, the extension cost, and the projected new end date.
 // Blocks extension if an active waitlist exists for the game.
 export const checkExtensionEligibility = async (rentalId: string): Promise<ExtensionEligibility> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   // Fetch the rental (must belong to current user and be active)
   const { data: rental, error: rentalError } = await supabase
@@ -221,8 +217,7 @@ export const checkExtensionEligibility = async (rentalId: string): Promise<Exten
 // Call this after the user confirms the extension cost.
 // Updates the rental's end_date and status, then logs an extension transaction.
 export const extendRental = async (rentalId: string): Promise<Rental> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   // Re-run eligibility check — prevent extending if conditions changed between confirm and submit
   const eligibility = await checkExtensionEligibility(rentalId);
@@ -272,8 +267,7 @@ export const extendRental = async (rentalId: string): Promise<Rental> => {
 
 // Call this before getMyActiveRentals to clean up stale rentals
 export const expireStaleRentals = async (): Promise<void> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   const { error } = await supabase
     .from('rentals')
@@ -292,8 +286,7 @@ export const expireStaleRentals = async (): Promise<void> => {
  * get rental copy record and all its fields
  */
 export const getRentalRecord = async (rentalId: string): Promise<Rental> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const user = await getAuthenticatedUser();
 
   const { data, error } = await supabase
     .from('rentals')

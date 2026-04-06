@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useAsyncData from '../hooks/useAsyncData';
 import ReviewsSection from "../components/ReviewsSection";
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -16,33 +17,28 @@ const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-    const [game, setGame] = useState<Game | null>(null);
-    const [loading, setLoading] = useState(true);
     const [showConfirm, setShowConfirm] = useState(false);
     const [renting, setRenting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const [accessKey, setAccessKey] = useState<string | null>(null);
-    const [alreadyRented, setAlreadyRented] = useState(false);
 
-    useEffect(() => {
-    const loadGame = async () => {
-    if (!id) return;
-      try {
-        const data = await getGameById(id);
-        setGame(data);
-
-        const rented = await hasActiveRental(id);
-        setAlreadyRented(rented);
-      } catch (err) {
-        console.error('Error loading game:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadGame();
-  }, [id]);
+    const { data, loading, refetch } = useAsyncData(
+      async () => {
+        if (!id) return null;
+        const gameData = await getGameById(id);
+        let rented = false;
+        try {
+          rented = await hasActiveRental(id);
+        } catch {
+          // not authenticated — treat as not rented
+        }
+        return { game: gameData, alreadyRented: rented };
+      },
+      [id]
+    );
+    const game = data?.game ?? null;
+    const alreadyRented = data?.alreadyRented ?? false;
 
   const handleRent = async () => {
     if (!game) return;
@@ -54,9 +50,7 @@ const GameDetailPage = () => {
         setAccessKey(rental.access_key);
         setSuccess(true);
         setShowConfirm(false);
-
-        const updatedGame = await getGameById(game.id);
-        if (updatedGame) setGame(updatedGame);
+        refetch();
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');

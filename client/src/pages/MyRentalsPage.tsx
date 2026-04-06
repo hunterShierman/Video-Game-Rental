@@ -8,6 +8,7 @@ import { getMyActiveRentals, getMyRentalHistory, expireStaleRentals } from '../s
 import type { RentalWithGame } from '../types/definitions';
 import { useNavigate } from 'react-router-dom';
 import RentalExpiryNotification from '../components/RentalExpiryNotification';
+import { formatDisplayDate } from '../utils/date';
 
 
 const MyRentalsPage = () => {
@@ -58,13 +59,6 @@ const MyRentalsPage = () => {
         }
     };
 
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
-    };
     const getStatusBadge = (status: string) => {
         switch (status) {
             case 'active':
@@ -183,7 +177,7 @@ const MyRentalsPage = () => {
                                             </div>
                                             <div className='flex items-center gap-2 text-sm'>
                                                 <Calendar className='w-4 h-4 text-gray-500' />
-                                                <span className='text-gray-400'>Returns: {formatDate(rental.end_date)}</span>
+                                                <span className='text-gray-400'>Returns: {formatDisplayDate(rental.end_date)}</span>
 
                                             </div>
                                             <div className='flex items-center gap-2 text-sm'>
@@ -278,11 +272,11 @@ const MyRentalsPage = () => {
                                                 </td>
 
                                                 <td className='py-4 px-6 text-gray-400'>
-                                                    {formatDate(rental.start_date)}
+                                                    {formatDisplayDate(rental.start_date)}
                                                 </td>
 
                                                 <td className='py-4 px-6 text-gray-400'>
-                                                    {rental.end_date ? formatDate(rental.end_date) : '-'}
+                                                    {rental.end_date ? formatDisplayDate(rental.end_date) : '-'}
                                                 </td>
 
                                                 <td className='py-4 px-6 text-gray-400'>

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useAsyncData from '../hooks/useAsyncData';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Gamepad2, Star, Clock, Users, ArrowLeft,
@@ -12,47 +13,34 @@ import type { ExtensionEligibility, Rental } from '../types/definitions';
 import { checkExtensionEligibility, extendRental, getRentalRecord } from '../services/rentalService';
 import RentalCountdown from '../components/RentalCountdown';
 import { EXTENSION_DURATION_DAYS } from '../utils/constants';
+import { formatLongDate } from '../utils/date';
 
 const RentalExtensionPage = () => {
   const { rentalId, gameId } = useParams<{ rentalId: string; gameId: string }>();
   const navigate = useNavigate();   
 
-  const [game, setGame] = useState<Game | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [eligibility, setEligibility] = useState<ExtensionEligibility | null>(null);
-  const [eligibilityLoading, setEligibilityLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
   const [extending, setExtending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [newEndDate, setNewEndDate] = useState<string | null>(null);
-  const [rental, setRental] = useState<Rental | null>(null);
 
-
-  useEffect(() => {
-    const load = async () => {
-      if (!gameId || !rentalId) return;
-      try {
-        const [gameData, eligibilityData, rentalData] = await Promise.all([
-            getGameById(gameId),
-            checkExtensionEligibility(rentalId),
-            getRentalRecord(rentalId),
-        ]);
-        setGame(gameData);
-        setEligibility(eligibilityData);
-        setRental(rentalData);
-
-
-      } catch (err) {
-        console.error('Error loading extension page:', err);
-        setError('Failed to load rental details.');
-      } finally {
-        setLoading(false);
-        setEligibilityLoading(false);
-      }
-    };
-    load();
-  }, [gameId, rentalId]);
+  const { data, loading, error: fetchError } = useAsyncData(
+    async () => {
+      if (!gameId || !rentalId) return null;
+      const [gameData, eligibilityData, rentalData] = await Promise.all([
+        getGameById(gameId),
+        checkExtensionEligibility(rentalId),
+        getRentalRecord(rentalId),
+      ]);
+      return { game: gameData, eligibility: eligibilityData, rental: rentalData };
+    },
+    [gameId, rentalId]
+  );
+  const game = data?.game ?? null;
+  const eligibility = data?.eligibility ?? null;
+  const rental = data?.rental ?? null;
+  const eligibilityLoading = loading;
 
   const handleExtend = async () => {
     if (!rentalId) return;
@@ -69,11 +57,6 @@ const RentalExtensionPage = () => {
       setExtending(false);
     }
   };
-
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString('en-US', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-    });
 
   if (loading) {
     return (
@@ -226,7 +209,7 @@ const RentalExtensionPage = () => {
                   <CalendarClock className="w-5 h-5 text-indigo-400 mt-0.5 shrink-0" />
                   <div>
                     <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">New Expiry Date</p>
-                    <p className="text-white font-semibold">{formatDate(eligibility.newEndDate)}</p>
+                    <p className="text-white font-semibold">{formatLongDate(eligibility.newEndDate)}</p>
                   </div>
                 </div>
               )}
@@ -259,7 +242,7 @@ const RentalExtensionPage = () => {
                 </p>
                 <div className="bg-slate-900/60 border border-green-500/20 rounded-xl p-4">
                   <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">New Expiry Date</p>
-                  <p className="text-xl font-bold text-green-400">{formatDate(newEndDate)}</p>
+                  <p className="text-xl font-bold text-green-400">{formatLongDate(newEndDate)}</p>
                 </div>
                 <button
                   onClick={() => navigate('/my-rentals')}
@@ -271,12 +254,12 @@ const RentalExtensionPage = () => {
             )}
 
             {/* Error state */}
-            {error && (
+            {(error || fetchError) && (
               <div className="flex items-start gap-3 bg-red-900/20 border border-red-500/30 rounded-2xl p-5">
                 <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 shrink-0" />
                 <div>
                   <p className="text-white font-semibold mb-1">Something went wrong</p>
-                  <p className="text-red-300 text-sm">{error}</p>
+                  <p className="text-red-300 text-sm">{error ?? fetchError}</p>
                 </div>
               </div>
             )}
@@ -290,7 +273,7 @@ const RentalExtensionPage = () => {
                   <span className="text-white font-semibold">{game.title}</span> for{' '}
                   <span className="text-indigo-400 font-bold">${eligibility.extensionCost}</span>.
                   Your access key stays the same and the new expiry date will be{' '}
-                  <span className="text-white font-semibold">{formatDate(eligibility.newEndDate)}</span>.
+                  <span className="text-white font-semibold">{formatLongDate(eligibility.newEndDate)}</span>.
                 </p>
                 <div className="flex gap-3">
                   <button

@@ -1,6 +1,7 @@
 // src/services/reviewService.ts
 import { supabase } from "../lib/supabaseClient";
 import type { Review } from "../types/definitions";
+import { getAuthenticatedUser } from "../utils/auth";
 
 /** Everyone can view reviews for a game */
 export const getReviewsForGame = async (gameId: string): Promise<Review[]> => {
@@ -66,8 +67,7 @@ export const upsertMyReview = async (
   rating: 1 | 2 | 3 | 4 | 5,
   comment: string
 ): Promise<Review> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuthenticatedUser();
 
   const allowed = await canCurrentUserReview(gameId);
   if (!allowed) throw new Error("You can only review games you have rented.");
@@ -102,8 +102,7 @@ export const upsertMyReview = async (
 };
 
 export const deleteMyReview = async (gameId: string): Promise<void> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuthenticatedUser();
 
   const { error } = await supabase
     .from("reviews")

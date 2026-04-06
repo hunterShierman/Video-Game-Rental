@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import useAsyncData from "../hooks/useAsyncData";
 import { AlertCircle, Loader2, Star, Trash2, MessageSquare, Pencil } from "lucide-react";
 import {
   canCurrentUserReview,
@@ -9,6 +10,7 @@ import {
 } from "../services/reviewService";
 import type { Review } from "../types/definitions";
 import { supabase } from "../lib/supabaseClient";
+import { formatDisplayDate } from "../utils/date";
 
 type Props = { gameId: string };
 
@@ -55,19 +57,41 @@ function StarRating({
 }
 
 export default function ReviewsSection({ gameId }: Props) {
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [myReview, setMyReview] = useState<Review | null>(null);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [canReview, setCanReview] = useState(false);
 
   const [rating, setRating] = useState<1 | 2 | 3 | 4 | 5>(5);
   const [comment, setComment] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+
+  const { data: reviewData, loading, error: loadError, refetch } = useAsyncData(
+    async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const [all, mine, eligible] = await Promise.all([
+        getReviewsForGame(gameId),
+        getMyReviewForGame(gameId),
+        canCurrentUserReview(gameId),
+      ]);
+      return { isLoggedIn: !!user, reviews: all, myReview: mine, canReview: eligible };
+    },
+    [gameId]
+  );
+
+  const reviews = reviewData?.reviews ?? [];
+  const myReview = reviewData?.myReview ?? null;
+  const canReview = reviewData?.canReview ?? false;
+  const isLoggedIn = reviewData?.isLoggedIn ?? false;
+
+  useEffect(() => {
+    if (reviewData === null) return;
+    if (reviewData.myReview) {
+      setRating(reviewData.myReview.rating);
+      setComment(reviewData.myReview.comment ?? "");
+    } else {
+      setRating(5);
+      setComment("");
+    }
+  }, [reviewData]);
 
   const avg = useMemo(() => {
     if (reviews.length === 0) return null;
@@ -81,50 +105,14 @@ export default function ReviewsSection({ gameId }: Props) {
     return counts.reverse();
   }, [reviews]);
 
-  const load = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      setIsLoggedIn(!!user);
-
-      const [all, mine, eligible] = await Promise.all([
-        getReviewsForGame(gameId),
-        getMyReviewForGame(gameId),
-        canCurrentUserReview(gameId),
-      ]);
-
-      setReviews(all);
-      setMyReview(mine);
-      setCanReview(eligible);
-
-      if (mine) {
-        setRating(mine.rating);
-        setComment(mine.comment ?? "");
-      } else {
-        setRating(5);
-        setComment("");
-      }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load reviews");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameId]);
 
   const submit = async () => {
     setSaving(true);
     setError(null);
     try {
-      const saved = await upsertMyReview(gameId, clamp(rating), comment);
-      setMyReview(saved);
+      await upsertMyReview(gameId, clamp(rating), comment);
       setIsEditing(false);
-      await load();
+      refetch();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to submit review");
     } finally {
@@ -137,11 +125,8 @@ export default function ReviewsSection({ gameId }: Props) {
     setError(null);
     try {
       await deleteMyReview(gameId);
-      setMyReview(null);
-      setRating(5);
-      setComment("");
       setIsEditing(false);
-      await load();
+      refetch();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to delete review");
     } finally {
@@ -168,10 +153,10 @@ export default function ReviewsSection({ gameId }: Props) {
         </div>
       ) : (
         <>
-          {error && (
+          {(error || loadError) && (
             <div className="flex items-start gap-3 bg-red-900/20 border border-red-500/30 rounded-xl p-4">
               <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 shrink-0" />
-              <p className="text-red-200 text-sm">{error}</p>
+              <p className="text-red-200 text-sm">{error ?? loadError}</p>
             </div>
           )}
 
@@ -308,11 +293,7 @@ export default function ReviewsSection({ gameId }: Props) {
 
                       <div className="flex items-center gap-2 shrink-0">
                         <span className="text-gray-500 text-xs">
-                          {new Date(r.created_at).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
+                          {formatDisplayDate(r.created_at)}
                         </span>
                         {isOwn && !isEditing && (
                           <>
