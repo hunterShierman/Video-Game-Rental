@@ -11,6 +11,90 @@ import RentalExpiryNotification from '../components/RentalExpiryNotification';
 import { formatDisplayDate } from '../utils/date';
 
 
+function getStatusBadge(status: string) {
+    switch (status) {
+        case 'active':
+            return (
+                <span className='inline-flex items-center gap-1 text-xs font-bold text-green-300 bg-green-500/50 border border-green-500/50 px-3 py-1 rounded-full'>
+                    <CheckCircle className='w-3 h-3' />
+                    ACTIVE
+                </span>
+            );
+        case 'completed':
+            return (
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-300 bg-blue-500/50 border border-blue-500/50 px-3 py-1 rounded-full">
+                    <History className='w-3 h-3' />
+                    COMPLETED
+                </span>
+            );
+        case 'extended':
+            return (
+                <span className='inline-flex items-center gap-1 text-xs font-bold text-orange-300 bg-orange-500/50 border border-orange-500/50 px-3 py-1 rounded-full'>
+                    <RefreshCw className='w-3 h-3' />
+                    EXTENDED
+                </span>
+            );
+        default:
+            return (
+                <span className='inline-flex items-center gap-1 text-xs font-bold text-gray-300 bg-gray-500/10 border border-gray-500/50 px-3 py-1 rounded-full'>
+                    {status.toUpperCase()}
+                </span>
+            );
+    }
+}
+
+function RentalCard({ rental, onClick }: { rental: RentalWithGame; onClick: () => void }) {
+    return (
+        <div
+            onClick={onClick}
+            className='bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-green-500/30 rounded-2xl overflow-hidden cursor-pointer hover:border-green-500/50 transition-all hover:shadow-lg hover:shadow-green-500/10'>
+            {/* game images */}
+            <div className='h-40 bg-gradient-to-br from-indigo-900/10 to-purple-900/40 relative'>
+                {rental.games.image_url ? (
+                    <img
+                        src={rental.games.image_url}
+                        alt={rental.games.title}
+                        className='w-full h-full object-cover' />
+                ) : (
+                    <div className='w-full h-full flex items-center justify-center'>
+                        <Film className='w-12 h-12 text-indigo-500/30' />
+                    </div>
+                )}
+                <div className='absolute top-3 right-3'>
+                    {getStatusBadge(rental.status)}
+                </div>
+            </div>
+            <div className='p-5'>
+                <h3 className='text-xl font-bold text-white mb-2'>{rental.games.title}</h3>
+                <div className='space-y-2 mb-4'>
+                    <div className='flex items-center gap-2 text-sm'>
+                        <Gamepad2 className='w-4 h-4 text-gray-500' />
+                        <span className='text-gray-400'>{rental.games.platform || 'Multi-platform'}</span>
+                    </div>
+                    <div className='flex items-center gap-2 text-sm'>
+                        <Key className='w-4 h-4 text-gray-500' />
+                        <span className='text-gray-400 font-mono text-xs'>{rental.access_key}</span>
+                    </div>
+                    <div className='flex items-center gap-2 text-sm'>
+                        <Calendar className='w-4 h-4 text-gray-500' />
+                        <span className='text-gray-400'>Returns: {formatDisplayDate(rental.end_date)}</span>
+                    </div>
+                    <div className='flex items-center gap-2 text-sm'>
+                        <DollarSign className='w-4 h-4 text-gray-500' />
+                        <span className='text-gray-400'>${rental.price}</span>
+                    </div>
+                </div>
+                <RentalExpiryNotification
+                    startDate={rental.start_date}
+                    endDate={rental.end_date}
+                    gameTitle={rental.games.title}
+                    gameId={rental.game_id}
+                />
+            </div>
+        </div>
+    );
+}
+
 const MyRentalsPage = () => {
     const [activeRentals, setActiveRentals] = useState<RentalWithGame[]>([]);
     const [rentalHistory, setRentalHistory] = useState<RentalWithGame[]>([]);
@@ -56,38 +140,6 @@ const MyRentalsPage = () => {
         } catch (err) {
             console.error(err);
             setError('Failed to load your rentals. Please try again.');
-        }
-    };
-
-    const getStatusBadge = (status: string) => {
-        switch (status) {
-            case 'active':
-                return (
-                    <span className='inline-flex items-center gap-1 text-xs font-bold text-green-300 bg-green-500/50 border border-green-500/50 px-3 py-1 rounded-full'>
-                        <CheckCircle className='w-3 h-3' />
-                        ACTIVE
-                    </span>
-                );
-            case 'completed':
-                return (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-300 bg-blue-500/50 border border-blue-500/50 px-3 py-1 rounded-full">
-                        <History className='w-3 h-3' />
-                        COMPLETED
-                    </span>
-                );
-            case 'extended':
-                return (
-                    <span className='inline-flex items-center gap-1 text-xs font-bold text-orange-300 bg-orange-500/50 border border-orange-500/50 px-3 py-1 rounded-full'>
-                        <RefreshCw className='w-3 h-3' />
-                        EXTENDED
-                    </span>
-                );
-            default:
-                return (
-                    <span className='inline-flex items-center gap-1 text-xs font-bold text-gray-300 bg-gray-500/10 border border-gray-500/50 px-3 py-1 rounded-full'>
-                        {status.toUpperCase()}
-                    </span>
-                );
         }
     };
 
@@ -141,61 +193,11 @@ const MyRentalsPage = () => {
                     ) : activeRentals.length > 0 ? (
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                             {activeRentals.map((rental) => (
-                                <div
+                                <RentalCard
                                     key={rental.id}
+                                    rental={rental}
                                     onClick={() => navigate(`/rental/${rental.id}/extend/${rental.game_id}`)}
-                                    className='bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-green-500/30 rounded-2xl overflow-hidden cursor-pointer hover:border-green-500/50 transition-all hover:shadow-lg hover:shadow-green-500/10'>
-                                    {/* game images */}
-                                    <div className='h-40 bg-gradient-to-br from-indigo-900/10 to-purple-900/40 relative'>
-                                        {rental.games.image_url ? (
-                                            <img
-                                                src={rental.games.image_url}
-                                                alt={rental.games.title}
-                                                className='w-full h-full object-cover' />
-                                        ) : (
-                                            <div className='w-full h-full flex items-center justify-center'>
-                                                <Film className='w-12 h-12 text-indigo-500/30' />
-                                            </div>
-                                        )}
-                                        <div className='absolute top-3 right-3'>
-                                            {getStatusBadge(rental.status)}
-                                        </div>
-                                    </div>
-                                    <div className='p-5'>
-
-                                        <h3 className='text-xl font-bold text-white mb-2'>{rental.games.title}</h3>
-                                        <div className='space-y-2 mb-4'>
-                                            <div className='flex items-center gap-2 text-sm'>
-                                                <Gamepad2 className='w-4 h-4 text-gray-500' />
-                                                <span className='text-gray-400'>{rental.games.platform || 'Multi-platform'}</span>
-
-                                            </div>
-                                            <div className='flex items-center gap-2 text-sm'>
-                                                <Key className='w-4 h-4 text-gray-500' />
-                                                <span className='text-gray-400 font-mono text-xs'>{rental.access_key}</span>
-
-                                            </div>
-                                            <div className='flex items-center gap-2 text-sm'>
-                                                <Calendar className='w-4 h-4 text-gray-500' />
-                                                <span className='text-gray-400'>Returns: {formatDisplayDate(rental.end_date)}</span>
-
-                                            </div>
-                                            <div className='flex items-center gap-2 text-sm'>
-                                                <DollarSign className='w-4 h-4 text-gray-500' />
-                                                <span className='text-gray-400'>${rental.price}</span>
-
-                                            </div>
-                                        </div>
-                                        <RentalExpiryNotification
-                                            startDate={rental.start_date}
-                                            endDate={rental.end_date}
-                                            gameTitle={rental.games.title}
-                                            gameId={rental.game_id}
-                                        />
-                                        {/* Coutdown timer */}
-
-                                    </div>
-                                </div>
+                                />
                             ))}
                         </div>
                     ) : (

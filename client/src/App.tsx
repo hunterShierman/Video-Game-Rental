@@ -12,6 +12,7 @@ import MyRentalsPage from './pages/MyRentalsPage';
 import RentalDetail from './pages/RentalDetail';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminGamesPage from './pages/AdminGamesPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
@@ -27,8 +28,8 @@ function App() {
         <Route path="/waitlist" element={<WaitlistPage />} />
         <Route path='/my-rentals' element={<MyRentalsPage />} />
         <Route path="/rental/:rentalId/extend/:gameId" element={<RentalDetail />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/admin-games" element={<AdminGamesPage />} />
+        <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin-games" element={<ProtectedRoute><AdminGamesPage /></ProtectedRoute>} />
 
       </Routes>
   );

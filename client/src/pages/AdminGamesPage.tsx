@@ -1,8 +1,5 @@
 import Navbar from '../components/NavBar';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
-import { useAuth } from '../context/AuthContext';
 import {
   getAllGames,
   createGame,
@@ -61,11 +58,6 @@ const emptyForm: CreateGameInput = {
 };
 
 function AdminGamesPage() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  const [authorized, setAuthorized] = useState(false);
-  const [authLoading, setAuthLoading] = useState(true);
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -81,36 +73,8 @@ function AdminGamesPage() {
   const [deleteTarget, setDeleteTarget] = useState<Game | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  // Check admin role
-  useEffect(() => {
-    const checkAdmin = async () => {
-      if (!user) {
-        navigate('/login');
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('role')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (error || data?.role !== 'Admin') {
-        navigate('/');
-        return;
-      }
-
-      setAuthorized(true);
-      setAuthLoading(false);
-    };
-
-    void checkAdmin();
-  }, [user, navigate]);
-
   // Load games
   useEffect(() => {
-    if (!authorized) return;
-
     const loadGames = async () => {
       setLoading(true);
       try {
@@ -123,7 +87,7 @@ function AdminGamesPage() {
     };
 
     void loadGames();
-  }, [authorized]);
+  }, []);
 
   const filteredGames = games.filter((g) =>
     g.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -237,20 +201,6 @@ function AdminGamesPage() {
     }
     setDeleting(false);
   };
-
-  // --- Render guards ---
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
-        <Navbar />
-        <div className="pt-32 flex justify-center">
-          <p className="text-indigo-200">Verifying admin access...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!authorized) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
