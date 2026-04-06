@@ -1,7 +1,7 @@
 // src/pages/HomePage.tsx
 import { Link } from 'react-router-dom';
 import { Gamepad2, Key, Star, Clock, Check, ArrowRight, Sparkles } from 'lucide-react';
-import { useState, useEffect } from 'react'; // Faizaan: extended import added useEffect
+import { useState, useEffect } from 'react';
 import Navbar from '../components/NavBar';
 import type { Game } from '../types/definitions';
 import GameCard from '../components/GameCard';
@@ -9,10 +9,10 @@ import { getTrendingGames } from '../services/gameService';
 
 function HomePage() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [trendingGames, setTrendingGames] = useState<Game[]>([]); // Faizaan: Added both these const
-  const [trendingLoading, setTrendingLoading] = useState(true); // second one
+  const [trendingGames, setTrendingGames] = useState<Game[]>([]);
+  const [trendingLoading, setTrendingLoading] = useState(true);
 
-  useEffect(() => {  //Faizaan: Added this useEffect
+  useEffect(() => {
     const loadTrendingGames = async () => {
       try {
         const data = await getTrendingGames();
@@ -25,7 +25,7 @@ function HomePage() {
     };
 
     loadTrendingGames();
-  }, []); //Faizaan: it ends here
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
@@ -86,7 +86,7 @@ function HomePage() {
         </div>
       </div>
       
-      {/*Trending Games Section - Faizaan*/}
+      {/* Trending Games Section */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -298,35 +298,6 @@ function HomePage() {
         </div>
       </footer>
 
-      {/* Custom CSS for Animations */}
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-
-        @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-float:hover {
-          animation: float 2s ease-in-out infinite;
-        }
-
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
-        }
-      `}</style>
     </div>
   );
 }

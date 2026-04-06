@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Gamepad2, Star, Clock } from 'lucide-react';
 import type { Game } from '../types/definitions';
+import { RENTAL_DURATION_DAYS } from '../utils/constants';
 
 interface GameCardProps {
   game: Game;
@@ -57,7 +58,7 @@ const GameCard = ({ game }: GameCardProps) => {
           </div>
           <div className="flex items-center gap-1 text-xs text-gray-400">
             <Clock className="w-3 h-3 text-indigo-400" />
-            <span>7 days</span>
+            <span>{RENTAL_DURATION_DAYS} days</span>
           </div>
         </div>
 

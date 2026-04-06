@@ -11,6 +11,7 @@ import type { Game } from '../types/definitions';
 import type { ExtensionEligibility, Rental } from '../types/definitions';
 import { checkExtensionEligibility, extendRental, getRentalRecord } from '../services/rentalService';
 import RentalCountdown from '../components/RentalCountdown';
+import { EXTENSION_DURATION_DAYS } from '../utils/constants';
 
 const RentalExtensionPage = () => {
   const { rentalId, gameId } = useParams<{ rentalId: string; gameId: string }>();
@@ -157,7 +158,7 @@ const RentalExtensionPage = () => {
                 {[
                   { label: 'Platform', value: game.platform, icon: <Gamepad2 className="w-4 h-4 text-indigo-400" /> },
                   { label: 'Genre', value: game.genre, icon: <Star className="w-4 h-4 text-yellow-400" /> },
-                  { label: 'Extension Period', value: '7 days', icon: <Clock className="w-4 h-4 text-purple-400" /> },
+                  { label: 'Extension Period', value: `${EXTENSION_DURATION_DAYS} days`, icon: <Clock className="w-4 h-4 text-purple-400" /> },
                   { label: 'Copies Available', value: `${game.available_copies} / ${game.total_copies}`, icon: <Users className="w-4 h-4 text-green-400" /> },
                   { label: 'Popularity Score', value: String(game.popularity_score), icon: <Star className="w-4 h-4 text-pink-400" /> },
                 ].map((stat) => (
@@ -185,7 +186,7 @@ const RentalExtensionPage = () => {
                 ) : eligibility?.eligible ? (
                   <>
                     <span className="text-3xl font-bold text-indigo-400">${eligibility.extensionCost}</span>
-                    <span className="text-gray-400 text-sm">/ 7-day extension</span>
+                    <span className="text-gray-400 text-sm">/ {EXTENSION_DURATION_DAYS}-day extension</span>
                   </>
                 ) : (
                   <span className="text-gray-500 text-sm">Extension unavailable</span>
@@ -206,7 +207,7 @@ const RentalExtensionPage = () => {
               <h3 className="text-white font-bold text-lg mb-4">Extension Details</h3>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: 'Extension Period', value: '7 days', icon: <Clock3 className="w-4 h-4 text-indigo-400" /> },
+                  { label: 'Extension Period', value: `${EXTENSION_DURATION_DAYS} days`, icon: <Clock3 className="w-4 h-4 text-indigo-400" /> },
                   { label: 'Access Method', value: rental?.access_key ?? 'Loading...', icon: <Key className="w-4 h-4 text-purple-400" /> },
                 ].map((item) => (
                   <div key={item.label} className="bg-slate-800/40 rounded-xl p-4 flex items-center gap-3">
@@ -327,7 +328,7 @@ const RentalExtensionPage = () => {
                 className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-indigo-500 hover:to-purple-500 transition-all transform hover:scale-[1.02] shadow-xl shadow-indigo-500/30 flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-5 h-5" />
-                Extend for 7 More Days — ${eligibility.extensionCost}
+                Extend for {EXTENSION_DURATION_DAYS} More Days — ${eligibility.extensionCost}
               </button>
             )}
 

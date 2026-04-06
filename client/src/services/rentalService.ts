@@ -1,6 +1,7 @@
 // src/services/rentalService.ts
 import { supabase } from '../lib/supabaseClient';
 import type { Rental, RentalWithGame, CreateRentalInput, ExtensionEligibility } from '../types/definitions';
+import { RENTAL_DURATION_DAYS, EXTENSION_DURATION_DAYS, EXTENSION_WINDOW_DAYS } from '../utils/constants';
 
 // Generates a rental access key in the format RENT-XXXX-XXXX-XXXX
 const generateAccessKey = (): string => {
@@ -11,7 +12,7 @@ const generateAccessKey = (): string => {
 // Returns an ISO date string 7 days from now
 const getRentalEndDate = (): string => {
   const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 7);
+  endDate.setDate(endDate.getDate() + RENTAL_DURATION_DAYS);
   return endDate.toISOString();
 };
 
@@ -177,10 +178,10 @@ export const checkExtensionEligibility = async (rentalId: string): Promise<Exten
   const endDate = new Date(rental.end_date);
   const daysRemaining = (endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
 
-  if (daysRemaining > 2) {
+  if (daysRemaining > EXTENSION_WINDOW_DAYS) {
       return {
           eligible: false,
-          reason: `Extensions are only available within 2 days of expiry. You have ${Math.ceil(daysRemaining)} days remaining.`,
+          reason: `Extensions are only available within ${EXTENSION_WINDOW_DAYS} days of expiry. You have ${Math.ceil(daysRemaining)} days remaining.`,
           extensionCost: 0,
           newEndDate: '',
       };
@@ -208,7 +209,7 @@ export const checkExtensionEligibility = async (rentalId: string): Promise<Exten
 
   // Eligible — project the new end date (7 more days from current end_date)
   const currentEnd = new Date(rental.end_date);
-  currentEnd.setDate(currentEnd.getDate() + 7);
+  currentEnd.setDate(currentEnd.getDate() + EXTENSION_DURATION_DAYS);
 
   return {
     eligible: true,

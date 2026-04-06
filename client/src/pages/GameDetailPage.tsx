@@ -10,6 +10,7 @@ import { getGameById } from '../services/gameService';
 import type { Game } from '../types/definitions';
 import { rentGame, hasActiveRental } from '../services/rentalService';
 import Waitlist from '../components/Waitlist';
+import { RENTAL_DURATION_DAYS } from '../utils/constants';
 
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -147,7 +148,7 @@ const GameDetailPage = () => {
                 {[
                   { label: 'Platform', value: game.platform, icon: <Gamepad2 className="w-4 h-4 text-indigo-400" /> },
                   { label: 'Genre', value: game.genre, icon: <Star className="w-4 h-4 text-yellow-400" /> },
-                  { label: 'Rental Duration', value: '7 days', icon: <Clock className="w-4 h-4 text-purple-400" /> },
+                  { label: 'Rental Duration', value: `${RENTAL_DURATION_DAYS} days`, icon: <Clock className="w-4 h-4 text-purple-400" /> },
                   { label: 'Copies Available', value: `${game.available_copies} / ${game.total_copies}`, icon: <Users className="w-4 h-4 text-green-400" /> },
                   { label: 'Popularity Score', value: String(game.popularity_score), icon: <Star className="w-4 h-4 text-pink-400" /> },
                 ].map((stat) => (
@@ -188,7 +189,7 @@ const GameDetailPage = () => {
               <h2 className="text-white font-bold text-lg mb-4">Rental Info</h2>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: 'Rental Period', value: '7 days', icon: <Clock3 className="w-4 h-4 text-indigo-400" /> },
+                  { label: 'Rental Period', value: `${RENTAL_DURATION_DAYS} days`, icon: <Clock3 className="w-4 h-4 text-indigo-400" /> },
                   { label: 'Access Method', value: 'Unique Key', icon: <Key className="w-4 h-4 text-purple-400" /> },
                 ].map((item) => (
                   <div key={item.label} className="bg-slate-800/40 rounded-xl p-4 flex items-center gap-3">
@@ -221,7 +222,7 @@ const GameDetailPage = () => {
                 <div className="bg-slate-900/60 border border-green-500/20 rounded-xl p-4">
                   <p className="text-2xl font-bold text-green-400 font-mono tracking-wider">{accessKey}</p>
                 </div>
-                <p className="text-gray-500 text-xs mt-3">This key will expire in 7 days. Keep it safe!</p>
+                <p className="text-gray-500 text-xs mt-3">This key will expire in {RENTAL_DURATION_DAYS} days. Keep it safe!</p>
               </div>
             )}
 
@@ -242,7 +243,7 @@ const GameDetailPage = () => {
                 <h2 className="text-white font-bold text-lg mb-2">Confirm Rental</h2>
                 <p className="text-gray-400 text-sm mb-5">
                   You are about to rent <span className="text-white font-semibold">{game.title}</span> for{' '}
-                  <span className="text-indigo-400 font-bold">${game.price}</span> for 7 days.
+                  <span className="text-indigo-400 font-bold">${game.price}</span> for {RENTAL_DURATION_DAYS} days.
                   Your access key will be generated immediately.
                 </p>
                 <div className="flex gap-3">

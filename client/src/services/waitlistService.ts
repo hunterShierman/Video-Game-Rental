@@ -45,8 +45,6 @@ export const joinWaitlist = async (gameId: string, userId: string) => {
     console.error('Error fetching last person in line:', fetchError);
   }
 
-  console.log("DEBUG: Last person found ->", lastPerson);
-
   // Step B: Calculate new position (Last + 1, or 1 if empty)
   const nextPosition = lastPerson ? lastPerson.position + 1 : 1;
 

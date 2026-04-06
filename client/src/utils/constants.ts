@@ -1,0 +1,3 @@
+export const RENTAL_DURATION_DAYS = 7;
+export const EXTENSION_DURATION_DAYS = 7;
+export const EXTENSION_WINDOW_DAYS = 2;
