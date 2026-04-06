@@ -11,7 +11,7 @@ import {
 import { supabase } from "../lib/supabaseClient";
 import { formatDisplayDate } from "../utils/date";
 
-type Props = { gameId: string };
+type Props = { gameId: string; isAdmin?: boolean };
 
 const clamp = (n: number) => Math.max(1, Math.min(5, n)) as 1 | 2 | 3 | 4 | 5;
 
@@ -55,7 +55,7 @@ function StarRating({
   );
 }
 
-export default function ReviewsSection({ gameId }: Props) {
+export default function ReviewsSection({ gameId, isAdmin = false }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -136,6 +136,12 @@ export default function ReviewsSection({ gameId }: Props) {
   return (
     <div className="space-y-6 mt-8">
 
+      {!loading && !isLoggedIn && !isAdmin && (
+        <p className="text-gray-500 text-sm text-center py-2">
+          <span className="text-indigo-400 cursor-pointer hover:underline">Log in</span> to leave a review.
+        </p>
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-3">
         <MessageSquare className="w-5 h-5 text-indigo-400" />
@@ -190,7 +196,7 @@ export default function ReviewsSection({ gameId }: Props) {
           )}
 
           {/* Write review form — only shown if canReview and no existing review, or currently editing */}
-          {canReview && (!myReview || isEditing) && (
+          {!isAdmin && canReview && (!myReview || isEditing) && (
             <div className="bg-slate-900/50 border border-indigo-500/20 rounded-2xl p-5">
               <p className="text-white font-semibold text-sm mb-4">
                 {myReview ? "Edit your review" : "Write a Review"}
@@ -241,13 +247,7 @@ export default function ReviewsSection({ gameId }: Props) {
             </div>
           )}
 
-          {!isLoggedIn && (
-            <p className="text-gray-500 text-sm text-center py-2">
-              <span className="text-indigo-400 cursor-pointer hover:underline">Log in</span> to leave a review.
-            </p>
-          )}
-
-          {isLoggedIn && !canReview && (
+          {!isAdmin && isLoggedIn && !canReview && (
             <p className="text-gray-500 text-sm text-center py-2">
               You can only review games you've rented.
             </p>

@@ -260,36 +260,6 @@ function HomePage() {
               </div>
               <p className="text-gray-400 text-sm">Affordable gaming for everyone. Rent, play, review.</p>
             </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Browse Games</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">How It Works</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4">Trust & Safety</h3>
-              <div className="flex gap-2">
-                <div className="bg-slate-800 border border-indigo-500/30 rounded px-3 py-1 text-xs text-gray-400">
-                  🔒 Secure Payments
-                </div>
-                <div className="bg-slate-800 border border-indigo-500/30 rounded px-3 py-1 text-xs text-gray-400">
-                  ✓ Fair Play
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="border-t border-indigo-900/30 pt-8 text-center text-gray-500 text-sm">

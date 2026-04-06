@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useAsyncData from '../hooks/useAsyncData';
 import ReviewsSection from "../components/ReviewsSection";
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Gamepad2, Star, Clock, Users, ArrowLeft,
-  CheckCircle, AlertCircle, Loader2, Key, Clock3
+  CheckCircle, AlertCircle, Loader2, Key, Clock3, LogIn
 } from 'lucide-react';
 import Navbar from '../components/NavBar';
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabaseClient';
 import { getGameById } from '../services/gameService';
 import { rentGame, hasActiveRental } from '../services/rentalService';
 import Waitlist from '../components/Waitlist';
@@ -15,6 +17,18 @@ import { RENTAL_DURATION_DAYS } from '../utils/constants';
 const GameDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); return; }
+    supabase
+      .from('user_profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle()
+      .then(({ data }) => setIsAdmin(data?.role === 'Admin'));
+  }, [user]);
 
     const [showConfirm, setShowConfirm] = useState(false);
     const [renting, setRenting] = useState(false);
@@ -231,7 +245,7 @@ const GameDetailPage = () => {
             )}
 
             {/* Confirmation step */}
-            {showConfirm && (
+            {!isAdmin && showConfirm && (
               <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/30 rounded-2xl p-6">
                 <h2 className="text-white font-bold text-lg mb-2">Confirm Rental</h2>
                 <p className="text-gray-400 text-sm mb-5">
@@ -266,11 +280,25 @@ const GameDetailPage = () => {
             )}
 
             {/* Rent / Waitlist button */}
-            {!success && !showConfirm && (
+            {!isAdmin && !success && !showConfirm && (
             alreadyRented ? (
                 <div className="w-full bg-indigo-900/20 border border-indigo-500/30 text-indigo-300 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2">
                 <CheckCircle className="w-5 h-5" />
                 You already have this game rented
+                </div>
+            ) : !user ? (
+                <div className="bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-indigo-500/20 rounded-2xl p-6 flex flex-col items-center gap-4 text-center">
+                  <LogIn className="w-8 h-8 text-indigo-400" />
+                  <div>
+                    <p className="text-white font-semibold text-lg mb-1">Sign in to rent this game</p>
+                    <p className="text-gray-400 text-sm">You need to be signed in to rent games.</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-xl font-bold hover:from-indigo-500 hover:to-purple-500 transition-all"
+                  >
+                    Sign In
+                  </button>
                 </div>
             ) : isAvailable ? (
                 <button
@@ -287,7 +315,7 @@ const GameDetailPage = () => {
 
             {/* Reviews */}
             <div className="mt-6">
-              <ReviewsSection gameId={game.id} />
+              <ReviewsSection gameId={game.id} isAdmin={isAdmin} />
             </div>
             
           </div>

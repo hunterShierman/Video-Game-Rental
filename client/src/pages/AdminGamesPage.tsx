@@ -66,6 +66,7 @@ function AdminGamesPage() {
   const [modalMode, setModalMode] = useState<ModalMode>('closed');
   const [editingGame, setEditingGame] = useState<Game | null>(null);
   const [form, setForm] = useState<CreateGameInput>(emptyForm);
+  const [priceText, setPriceText] = useState('');
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState('');
 
@@ -96,6 +97,7 @@ function AdminGamesPage() {
   // --- Modal handlers ---
   const openAdd = () => {
     setForm(emptyForm);
+    setPriceText('');
     setEditingGame(null);
     setFormError('');
     setModalMode('add');
@@ -112,6 +114,7 @@ function AdminGamesPage() {
       total_copies: game.total_copies,
       available_copies: game.available_copies,
     });
+    setPriceText(String(game.price));
     setEditingGame(game);
     setFormError('');
     setModalMode('edit');
@@ -150,26 +153,28 @@ function AdminGamesPage() {
       setFormError('Platform is required.');
       return;
     }
-    if (form.price < 0) {
-      setFormError('Price cannot be negative.');
+    const parsedPrice = parseFloat(priceText);
+    if (isNaN(parsedPrice) || parsedPrice < 0) {
+      setFormError('Price must be a valid non-negative number.');
       return;
     }
+    const finalForm = { ...form, price: parsedPrice };
 
     setSaving(true);
     try {
       if (modalMode === 'add') {
-        const created = await createGame(form);
+        const created = await createGame(finalForm);
         setGames((prev) => [...prev, created].sort((a, b) => a.title.localeCompare(b.title)));
       } else if (modalMode === 'edit' && editingGame) {
         const updates: UpdateGameInput = {
-          title: form.title,
-          description: form.description || undefined,
-          genre: form.genre,
-          platform: form.platform,
-          price: form.price,
-          image_url: form.image_url || undefined,
-          total_copies: form.total_copies,
-          available_copies: form.available_copies,
+          title: finalForm.title,
+          description: finalForm.description || undefined,
+          genre: finalForm.genre,
+          platform: finalForm.platform,
+          price: finalForm.price,
+          image_url: finalForm.image_url || undefined,
+          total_copies: finalForm.total_copies,
+          available_copies: finalForm.available_copies,
         };
         const updated = await updateGame(editingGame.id, updates);
         setGames((prev) =>
@@ -444,11 +449,11 @@ function AdminGamesPage() {
                   </label>
                   <input
                     name="price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={form.price}
-                    onChange={handleFormChange}
+                    type="text"
+                    inputMode="decimal"
+                    value={priceText}
+                    onChange={(e) => setPriceText(e.target.value)}
+                    placeholder="0.00"
                     className="w-full px-4 py-2.5 rounded-lg bg-slate-900/80 border border-indigo-500/20 text-white focus:outline-none focus:border-indigo-500/50"
                   />
                 </div>
