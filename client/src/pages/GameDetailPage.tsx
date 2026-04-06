@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/NavBar';
 import { getGameById } from '../services/gameService';
-import type { Game } from '../types/definitions';
 import { rentGame, hasActiveRental } from '../services/rentalService';
 import Waitlist from '../components/Waitlist';
 import { RENTAL_DURATION_DAYS } from '../utils/constants';

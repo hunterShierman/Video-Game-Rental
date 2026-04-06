@@ -8,7 +8,6 @@ import {
   getReviewsForGame,
   upsertMyReview,
 } from "../services/reviewService";
-import type { Review } from "../types/definitions";
 import { supabase } from "../lib/supabaseClient";
 import { formatDisplayDate } from "../utils/date";
 

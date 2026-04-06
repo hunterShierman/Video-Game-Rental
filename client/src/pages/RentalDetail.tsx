@@ -8,8 +8,6 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/NavBar';
 import { getGameById } from '../services/gameService';
-import type { Game } from '../types/definitions';
-import type { ExtensionEligibility, Rental } from '../types/definitions';
 import { checkExtensionEligibility, extendRental, getRentalRecord } from '../services/rentalService';
 import RentalCountdown from '../components/RentalCountdown';
 import { EXTENSION_DURATION_DAYS } from '../utils/constants';
