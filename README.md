@@ -26,7 +26,7 @@ Click this link to view our hosted website: https://video-game-rental-a7fu.verce
 
 #### 1. Clone the repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/hunterShierman/Video-Game-Rental.git
 cd video-game-rental
 ```
 
