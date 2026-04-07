@@ -1,4 +1,4 @@
-# GameRent - Retro Video Game Rental Platform
+﻿# GameRent - Retro Video Game Rental Platform
 
 <img width="1618" height="562" alt="image" src="https://github.com/user-attachments/assets/f7f88263-3377-4cc0-aad4-f9de1f22f179" />
 
@@ -102,44 +102,6 @@ client/
 | `waitlist` | Queued users per game |
 | `transactions` | Payment history for rentals and extensions |
 
-## Common Issues
-
-**"Missing Supabase environment variables"**
-- Ensure `.env` exists in `client/`
-- Variables must start with `VITE_`
-- Restart the dev server after adding `.env`
-
-**"useAuth must be used within AuthProvider"**
-- Verify `AuthProvider` wraps `<App />` in `main.tsx`
-
-**Authentication not working**
-- Check the Supabase dashboard is active
-- Confirm API keys are correct
-- Check the browser console for errors
-
-## Git Workflow
-
-```bash
-# Before starting work
-git pull origin main
-git checkout -b feature/your-feature-name
-
-# When done
-git add .
-git commit -m "Add: description of what you built"
-git push origin feature/your-feature-name
-```
-
-Then open a Pull Request on GitHub.
-
-## Resources
-
-- [React Docs](https://react.dev)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-- [Tailwind CSS Docs](https://tailwindcss.com/docs)
-- [Supabase Docs](https://supabase.com/docs)
-- [React Router Docs](https://reactrouter.com)
-
 ## Team
 
 | Name | Role |
@@ -149,7 +111,3 @@ Then open a Pull Request on GitHub.
 | Aashir Shamim | Developer |
 | Hussain Ismailzada | Developer |
 | Faras Khan | Developer |
-
-## Need Help?
-
-Contact Hunter (Scrum Master) on Discord/Instagram.
