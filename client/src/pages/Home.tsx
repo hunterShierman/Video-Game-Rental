@@ -253,17 +253,15 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 text-white text-xl font-bold mb-4">
-                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg">
-                  <Gamepad2 className="w-5 h-5" />
-                </div>
-                <span>GameRent</span>
+                <img src="/—Pngtree—retro arcade game machines_21125857.png" alt="Rentcadia logo" className="w-9 h-9 object-contain" />
+                <span>Rentcadia</span>
               </div>
               <p className="text-gray-400 text-sm">Retro gaming for everyone. Rent, play, relive.</p>
             </div>
           </div>
 
           <div className="border-t border-indigo-900/30 pt-8 text-center text-gray-500 text-sm">
-            <p>© 2026 GameRent. All rights reserved. Making retro gaming accessible and affordable.</p>
+            <p>© 2026 Rentcadia. All rights reserved. Making retro gaming accessible and affordable.</p>
           </div>
         </div>
       </footer>

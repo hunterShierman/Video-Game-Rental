@@ -1,6 +1,6 @@
 // src/components/common/Navbar.tsx
 import { Link } from 'react-router-dom';
-import { Gamepad2, UserCircle } from 'lucide-react';
+import { UserCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -57,11 +57,9 @@ function Navbar() {
     <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-indigo-500/20 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 text-white text-xl font-bold hover:opacity-80 transition-opacity">
-          <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg">
-            <Gamepad2 className="w-6 h-6" />
-          </div>
+          <img src="/—Pngtree—retro arcade game machines_21125857.png" alt="Rentcadia logo" className="w-10 h-10 object-contain" />
           <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            GameRent
+            Rentcadia
           </span>
         </Link>
 

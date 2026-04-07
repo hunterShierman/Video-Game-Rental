@@ -47,7 +47,7 @@ function ForgotPasswordPage() {
               <Gamepad2 className="w-8 h-8 text-white" />
             </div>
             <span className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              GameRent
+              Rentcadia
             </span>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Reset Password</h1>

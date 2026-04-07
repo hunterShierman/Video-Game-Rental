@@ -1,4 +1,4 @@
-﻿# GameRent - Retro Video Game Rental Platform
+﻿# Rentcadia - Retro Video Game Rental Platform
 
 <img width="1618" height="562" alt="image" src="https://github.com/user-attachments/assets/f7f88263-3377-4cc0-aad4-f9de1f22f179" />
 
@@ -101,6 +101,15 @@ client/
 | `reviews` | Star ratings and comments per game |
 | `waitlist` | Queued users per game |
 | `transactions` | Payment history for rentals and extensions |
+
+## Testing the Admin Account
+
+To test admin functionality, sign in with the following credentials:
+
+- **Email**: hshie5173@gmail.com
+- **Password**: Test1234
+
+This account has access to the `/admin-dashboard` and `/admin-games` routes.
 
 ## Team
 
