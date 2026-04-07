@@ -1,6 +1,6 @@
 ﻿# Rentcadia - Retro Video Game Rental Platform
 
-<img width="1618" height="562" alt="image" src="https://github.com/user-attachments/assets/f7f88263-3377-4cc0-aad4-f9de1f22f179" />
+<img width="1156" height="495" alt="image" src="https://github.com/user-attachments/assets/cc7db5b4-f702-4db6-acad-3b035c0e0d65" />
 
 A digital retro game rental platform where users can rent classic titles (NES, SNES, N64, PS1, and more) for $3-7/week using temporary access keys. No cartridge hunting required.
 
