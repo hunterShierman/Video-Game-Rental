@@ -1,8 +1,8 @@
-# GameRent — Retro Video Game Rental Platform
+# GameRent - Retro Video Game Rental Platform
 
 <img width="1618" height="562" alt="image" src="https://github.com/user-attachments/assets/f7f88263-3377-4cc0-aad4-f9de1f22f179" />
 
-A digital retro game rental platform where users can rent classic titles (NES, SNES, N64, PS1, and more) for $3–7/week using temporary access keys — no cartridge hunting required.
+A digital retro game rental platform where users can rent classic titles (NES, SNES, N64, PS1, and more) for $3-7/week using temporary access keys. No cartridge hunting required.
 
 ## Tech Stack
 
@@ -54,7 +54,7 @@ Visit `http://localhost:5173`
 client/
 └── src/
     ├── components/       # Reusable UI components (Navbar, GameCard, Modal, etc.)
-    ├── context/          # React Context — AuthContext (sign in/out/up)
+    ├── context/          # React Context - AuthContext (sign in/out/up)
     ├── hooks/            # Custom hooks (useAsyncData)
     ├── lib/              # Supabase client instance
     ├── pages/            # Route-level page components
@@ -82,15 +82,15 @@ client/
 
 ## Features
 
-- **Browse & filter** — search by title, genre, platform, and era (70s/80s/90s)
-- **Rental system** — rent for a fixed period, receive a unique access key
-- **Rental countdown** — live timer showing time remaining on active rentals
-- **Rental extension** — extend eligible rentals before they expire
-- **Waitlist** — join a queue when a game has no available copies
-- **Game recommendations** — suggested titles based on rental history
-- **Reviews** — authenticated users can rate and review games they've rented
-- **Admin dashboard** — analytics on revenue, genre popularity, waitlist lengths
-- **Admin game management** — add, edit, and delete games from the library
+- **Browse & filter**: search by title, genre, platform, and era (70s/80s/90s)
+- **Rental system**: rent for a fixed period, receive a unique access key
+- **Rental countdown**: live timer showing time remaining on active rentals
+- **Rental extension**: extend eligible rentals before they expire
+- **Waitlist**: join a queue when a game has no available copies
+- **Game recommendations**: suggested titles based on rental history
+- **Reviews**: authenticated users can rate and review games they've rented
+- **Admin dashboard**: analytics on revenue, genre popularity, waitlist lengths
+- **Admin game management**: add, edit, and delete games from the library
 
 ## Database Tables
 
