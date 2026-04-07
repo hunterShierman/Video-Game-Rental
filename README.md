@@ -19,19 +19,24 @@ A digital retro game rental platform where users can rent classic titles (NES, S
 
 ## Setup
 
-### 1. Clone the repository
+### Option 1: No Setup Required
+Click this link to view our hosted website: https://video-game-rental-a7fu.vercel.app/browse-page
+
+### Option 2: Run code locally on your computer
+
+#### 1. Clone the repository
 ```bash
 git clone <your-repo-url>
 cd video-game-rental
 ```
 
-### 2. Install dependencies
+#### 2. Install dependencies
 ```bash
 cd client
 npm install
 ```
 
-### 3. Configure environment variables
+#### 3. Configure environment variables
 
 Create a `.env` file in the `client/` directory:
 ```env
@@ -41,7 +46,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 
 Ask the team lead for the actual values.
 
-### 4. Start the dev server
+#### 4. Start the dev server
 ```bash
 npm run dev
 ```
@@ -63,7 +68,7 @@ client/
     └── utils/            # Auth helpers, date utilities, constants
 ```
 
-## Routes
+## React Routes
 
 | Path | Page | Auth Required |
 |------|------|:---:|
@@ -102,6 +107,15 @@ client/
 | `waitlist` | Queued users per game |
 | `transactions` | Payment history for rentals and extensions |
 
+## Testing the Customer Account
+
+To test customer functionality, sign simply create a new account with your email!
+
+If you would like to use a testing account, you can sign in with the follow credentials.
+
+- **Email**: hshierman@gmail.com
+- **Password**: Test1234
+
 ## Testing the Admin Account
 
 To test admin functionality, sign in with the following credentials:
@@ -109,7 +123,7 @@ To test admin functionality, sign in with the following credentials:
 - **Email**: hshie5173@gmail.com
 - **Password**: Test1234
 
-This account has access to the `/admin-dashboard` and `/admin-games` routes.
+This account has access to the Admin private routes`/admin-dashboard` and `/admin-games`.
 
 ## Team
 
