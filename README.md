@@ -1,180 +1,138 @@
-﻿# Video Game Rental Platform
- <img width="1618" height="562" alt="image" src="https://github.com/user-attachments/assets/f7f88263-3377-4cc0-aad4-f9de1f22f179" />
+# GameRent — Retro Video Game Rental Platform
 
+<img width="1618" height="562" alt="image" src="https://github.com/user-attachments/assets/f7f88263-3377-4cc0-aad4-f9de1f22f179" />
 
-A digital game rental platform where users can rent games for $5-10/week with temporary access keys.
+A digital retro game rental platform where users can rent classic titles (NES, SNES, N64, PS1, and more) for $3–7/week using temporary access keys — no cartridge hunting required.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Frontend**: React + TypeScript + Vite
-- **Backend**: Supabase (PostgreSQL)
+- **Backend**: Supabase (PostgreSQL + Auth + RPC)
 - **Styling**: Tailwind CSS
-- **Routing**: React Router
-- **Auth**: Supabase Auth
+- **Routing**: React Router v6
 
-## 📋 Prerequisites
+## Prerequisites
 
-- Node.js (v18+)
-- npm or yarn
+- Node.js v18+
+- npm
 - Git
 
-## 🛠️ Setup Instructions
+## Setup
 
-### 1. Clone the Repository
+### 1. Clone the repository
 ```bash
 git clone <your-repo-url>
 cd video-game-rental
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 ```bash
 cd client
 npm install
 ```
 
-### 3. Environment Variables
+### 3. Configure environment variables
 
-Create a `.env` file in the `/client` directory:
+Create a `.env` file in the `client/` directory:
 ```env
 VITE_SUPABASE_URL=your_supabase_url_here
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 ```
 
-**Ask the team lead for the actual values!**
+Ask the team lead for the actual values.
 
-### 4. Run Development Server
+### 4. Start the dev server
 ```bash
 npm run dev
 ```
-.
 
 Visit `http://localhost:5173`
 
-## 📁 Project Structure
+## Project Structure
+
 ```
 client/
-├── src/
-│   ├── assets/           # Reusable components
-│   ├── components/       # Reusable components
-│   ├── context/          # React Context (User Authentication sign in logic)
-│   ├── hooks/            # Custom React hooks
-│   ├── lib/              # Supabase client
-│   ├── pages/            # Page components
-│   ├── services/         # API calls to Supabase
-│   ├── types/            # TypeScript types
+└── src/
+    ├── components/       # Reusable UI components (Navbar, GameCard, Modal, etc.)
+    ├── context/          # React Context — AuthContext (sign in/out/up)
+    ├── hooks/            # Custom hooks (useAsyncData)
+    ├── lib/              # Supabase client instance
+    ├── pages/            # Route-level page components
+    ├── services/         # Supabase data access (games, rentals, reviews, waitlist)
+    ├── types/            # Shared TypeScript interfaces (Game, Rental, Review, etc.)
+    └── utils/            # Auth helpers, date utilities, constants
 ```
 
-## 🗄️ Database Schema
+## Routes
 
-### Tables
-- `games` - Game library
-- `rentals` - User rentals
-- `reviews` - Game reviews
-- `waitlist` - Waitlist for unavailable games
-- `transactions` - Payment history
+| Path | Page | Auth Required |
+|------|------|:---:|
+| `/` | Home (trending games, how-it-works) | No |
+| `/browse-page` | Browse & filter retro library | No |
+| `/games/:id` | Game detail + reviews | No |
+| `/login` | Login | No |
+| `/register` | Register | No |
+| `/forgot-password` | Forgot password | No |
+| `/update-password` | Reset password | No |
+| `/my-rentals` | View active rentals + countdowns | No |
+| `/rental/:rentalId/extend/:gameId` | Extend a rental | No |
+| `/waitlist` | Waitlist for unavailable games | No |
+| `/admin-dashboard` | Analytics dashboard | Admin only |
+| `/admin-games` | Manage game library (CRUD) | Admin only |
 
-### Available Services
+## Features
 
-**Game Service** (`src/services/gameService.ts`):
-```typescript
-import { getAllGames, getGameById, searchGames } from '../services/gameService';
-```
+- **Browse & filter** — search by title, genre, platform, and era (70s/80s/90s)
+- **Rental system** — rent for a fixed period, receive a unique access key
+- **Rental countdown** — live timer showing time remaining on active rentals
+- **Rental extension** — extend eligible rentals before they expire
+- **Waitlist** — join a queue when a game has no available copies
+- **Game recommendations** — suggested titles based on rental history
+- **Reviews** — authenticated users can rate and review games they've rented
+- **Admin dashboard** — analytics on revenue, genre popularity, waitlist lengths
+- **Admin game management** — add, edit, and delete games from the library
 
-**Auth Context** (`src/context/AuthContext.tsx`):
-```typescript
-import { useAuth } from '../context/AuthContext';
-const { user, signIn, signOut, signUp } = useAuth();
-```
+## Database Tables
 
-## 🎨 Component Examples
+| Table | Purpose |
+|-------|---------|
+| `games` | Game library (title, genre, platform, release_year, copies, price) |
+| `rentals` | User rentals with access keys, dates, and status |
+| `reviews` | Star ratings and comments per game |
+| `waitlist` | Queued users per game |
+| `transactions` | Payment history for rentals and extensions |
 
-### Using the Navbar
-```typescript
-import Navbar from '../components/common/Navbar';
+## Common Issues
 
-function MyPage() {
-  return (
-    <>
-      <Navbar />
-      <div className="pt-32 px-6">
-        {/* Your content */}
-      </div>
-    </>
-  );
-}
-```
+**"Missing Supabase environment variables"**
+- Ensure `.env` exists in `client/`
+- Variables must start with `VITE_`
+- Restart the dev server after adding `.env`
 
-### Fetching Games
-```typescript
-import { useEffect, useState } from 'react';
-import { getAllGames, Game } from '../services/gameService';
+**"useAuth must be used within AuthProvider"**
+- Verify `AuthProvider` wraps `<App />` in `main.tsx`
 
-function BrowseGames() {
-  const [games, setGames] = useState<Game[]>([]);
-  
-  useEffect(() => {
-    const fetchGames = async () => {
-      const data = await getAllGames();
-      setGames(data);
-    };
-    fetchGames();
-  }, []);
-  
-  return <div>{/* Render games */}</div>;
-}
-```
+**Authentication not working**
+- Check the Supabase dashboard is active
+- Confirm API keys are correct
+- Check the browser console for errors
 
-### Using Auth
-```typescript
-import { useAuth } from '../context/AuthContext';
+## Git Workflow
 
-function ProtectedPage() {
-  const { user, loading } = useAuth();
-  
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <div>Please login</div>;
-  
-  return <div>Welcome {user.email}</div>;
-}
-```
-
-## 📝 Git Workflow
-
-### Before You Start Working
 ```bash
+# Before starting work
 git pull origin main
 git checkout -b feature/your-feature-name
-```
 
-### When You're Done
-```bash
+# When done
 git add .
 git commit -m "Add: description of what you built"
 git push origin feature/your-feature-name
 ```
 
-Then create a Pull Request on GitHub!
+Then open a Pull Request on GitHub.
 
-## 🎯 Available Features to Build
-
-See `TASKS.md` for the list of features that need to be built.
-
-## 🐛 Common Issues
-
-### "Missing Supabase environment variables"
-- Make sure you have `.env` file in `/client` directory
-- Make sure variables start with `VITE_`
-- Restart dev server after adding `.env`
-
-### "useAuth must be used within AuthProvider"
-- Check that `AuthProvider` wraps `<App />` in `main.tsx`
-
-### Authentication not working
-- Check Supabase dashboard is online
-- Verify API keys are correct
-- Check browser console for errors
-
-## 📚 Resources
+## Resources
 
 - [React Docs](https://react.dev)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
@@ -182,16 +140,16 @@ See `TASKS.md` for the list of features that need to be built.
 - [Supabase Docs](https://supabase.com/docs)
 - [React Router Docs](https://reactrouter.com)
 
-## 👥 Team
+## Team
 
-- **Faizaan Delvi** - Product Owner
-- **Hunter Shierman** - Scrum Master
-- **Aashir Shamim** - Developer
-- **Hussain Ismailzada** - Developer
-- **Faras Khan** - Developer
+| Name | Role |
+|------|------|
+| Faizaan Delvi | Product Owner |
+| Hunter Shierman | Scrum Master |
+| Aashir Shamim | Developer |
+| Hussain Ismailzada | Developer |
+| Faras Khan | Developer |
 
-## 📞 Need Help?
+## Need Help?
 
-
-Contact Hunter (Scrum Master) on Discord/Instagram
-
+Contact Hunter (Scrum Master) on Discord/Instagram.
