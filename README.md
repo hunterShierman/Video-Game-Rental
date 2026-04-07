@@ -20,7 +20,7 @@ A digital retro game rental platform where users can rent classic titles (NES, S
 ## Setup
 
 ### Option 1: No Setup Required
-Click this link to view our hosted website: https://video-game-rental-a7fu.vercel.app/browse-page
+Click this link to view our hosted website: https://video-game-rental.vercel.app/
 
 ### Option 2: Run code locally on your computer
 
