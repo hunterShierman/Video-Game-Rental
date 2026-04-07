@@ -126,7 +126,7 @@ const RentalTestPage = () => {
             </div>
 
             {/* Countdown timer on the newly created rental */}
-            <RentalCountdown endDate={rental.end_date} rentalId={rental.id} />
+            <RentalCountdown endDate={rental.end_date}  />
           </div>
         )}
 
@@ -186,7 +186,7 @@ const RentalTestPage = () => {
                   </div>
 
                   {/* Countdown timer on each active rental */}
-                  <RentalCountdown endDate={r.end_date} rentalId={r.id} />
+                  <RentalCountdown endDate={r.end_date}  />
                 </div>
               ))}
             </div>

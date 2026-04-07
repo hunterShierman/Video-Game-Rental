@@ -213,7 +213,7 @@ const RentalExtensionPage = () => {
               )}
             </div>
 
-            {rental && <RentalCountdown endDate={rental.end_date} rentalId={rental.id} />}
+            {rental && <RentalCountdown endDate={rental.end_date} />}
 
 
             {/* Ineligible state */}

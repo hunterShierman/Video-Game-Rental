@@ -3,7 +3,6 @@ import { Clock, AlertTriangle } from 'lucide-react';
 
 interface RentalCountdownProps {
   endDate: string;
-  rentalId: string;
 }
 
 interface TimeLeft {
@@ -31,9 +30,7 @@ const calculateTimeLeft = (endDate: string): TimeLeft | null => {
 // Pads single digit numbers with a leading zero (e.g. 5 → "05")
 const pad = (n: number): string => String(n).padStart(2, '0');
 
-// add this comment to ignore the unused parameter error for rentalID, not needed now but will be needed in the future
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const RentalCountdown = ({ endDate, rentalId }: RentalCountdownProps) => {
+const RentalCountdown = ({ endDate }: RentalCountdownProps) => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(calculateTimeLeft(endDate));
 
   useEffect(() => {
