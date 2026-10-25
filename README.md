@@ -129,7 +129,7 @@ This account has access to the Admin private routes`/admin-dashboard` and `/admi
 
 | Name | Role |
 |------|------|
-| Faizaan Delvi | Product Owner |
+| Faizaan Delvi | Product Owner / Developer|
 | Hunter Shierman | Scrum Master |
 | Aashir Shamim | Developer |
 | Hussain Ismailzada | Developer |
