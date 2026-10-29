@@ -19,9 +19,6 @@ A digital retro game rental platform where users can rent classic titles (NES, S
 
 ## Setup
 
-### Option 1: No Setup Required
-Click this link to view our hosted website: https://video-game-rental.vercel.app/
-
 ### Option 2: Run code locally on your computer
 
 #### 1. Clone the repository
@@ -129,8 +126,8 @@ This account has access to the Admin private routes`/admin-dashboard` and `/admi
 
 | Name | Role |
 |------|------|
-| Faizaan Delvi | Product Owner |
-| Hunter Shierman | Scrum Master |
+| Faizaan Delvi | Developer |
+| Hunter Shierman | Developer |
 | Aashir Shamim | Developer |
 | Hussain Ismailzada | Developer |
 | Faras Khan | Developer |
